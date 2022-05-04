@@ -153,7 +153,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: -- $CLIPPY_FLAGS
+          args: -- ${{ env.CLIPPY_FLAGS }}
   docs:
     needs: coverage
     runs-on: ubuntu-latest
