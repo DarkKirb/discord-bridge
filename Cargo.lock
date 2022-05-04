@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "discord-bridge"
+name = "discord-matrix-bridge"
 version = "0.1.0"

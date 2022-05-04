@@ -1,7 +1,15 @@
 [package]
-name = "rust-template"
+name = "discord-matrix-bridge"
 version = "0.1.0"
 edition = "2021"
+authors = ["Charlotte 🦝 Delenk <lotte@chir.rs>"]
+rust-version = "1.60.0"
+description = "Application Service that bridges Discord to Matrix"
+readme = "README.md"
+repository = "https://github.com/DarkKirb/discord-bridge"
+license = "Apache-2.0"
+keywords = ["matrix", "discord", "bridge"]
+categories = ["network-programming"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
