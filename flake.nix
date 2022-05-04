@@ -41,12 +41,13 @@
             extensions = [ "rust-src" ];
           })
           cargo2nix.packages.${system}.cargo2nix
-          cargo-fuzz
+          cargo-audit
           sqlx-cli
         ];
       };
-      packages = {
-        chir-rs-crypto = rustPkgs.workspace.chir-rs-crypto { };
+      packages = rec {
+        discord-matrix-bridge = rustPkgs.workspace.discord-matrix-bridge { };
+        default = discord-matrix-bridge;
       };
       nixosModules.default = import ./nixos {
         inherit inputs system;

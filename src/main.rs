@@ -1,6 +1,11 @@
 //! Discord-Matrix bridge
 
 /// Main program entrypoint
-fn main() {
-    println!("Hello, world!");
+#[tokio::main]
+fn main() -> Result<()> {
+    dotenv::dotenv().ok();
+    color_eyre::install()?;
+    tracing_subscriber::fmt::init();
+
+    Ok(())
 }
