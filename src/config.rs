@@ -22,7 +22,7 @@ impl File {
     /// This function returns an error if accessing the disk fails or the file is invalid
     pub fn read_from_file(f: impl AsRef<Path>) -> Result<Self> {
         let file = fs::File::open(f)?;
-        Ok(serde_json::from_reader(file)?)
+        Ok(serde_yaml::from_reader(file)?)
     }
 }
 

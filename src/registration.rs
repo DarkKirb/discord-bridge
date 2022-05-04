@@ -46,7 +46,7 @@ fn generate_registration(config: &ConfigFile) -> Registration {
 pub fn generate_registration_cmd(config: &ConfigFile, args: &crate::Args) -> Result<Registration> {
     let registration = generate_registration(config);
     let file = fs::File::create(&args.registration)?;
-    serde_json::to_writer(file, &registration)?;
+    serde_yaml::to_writer(file, &registration)?;
     Ok(registration)
 }
 
