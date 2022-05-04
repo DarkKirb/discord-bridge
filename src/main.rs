@@ -8,24 +8,26 @@ use color_eyre::eyre::Result;
 pub mod config;
 pub use config::File as ConfigFile;
 
+pub mod registration;
+
 /// Application service to connect discord to matrix
 #[derive(Clone, Debug, Parser)]
 #[clap(author, version, about, long_about = None)]
-struct Args {
+pub struct Args {
     /// Path to configuration file
     #[clap(short, long)]
-    config: PathBuf,
+    pub config: PathBuf,
     /// Path to registration file
     #[clap(short, long)]
-    registration: PathBuf,
+    pub registration: PathBuf,
     /// Command to execute
     #[clap(subcommand)]
-    subcommand: Command,
+    pub subcommand: Command,
 }
 
 /// Subcommand list
-#[derive(Clone, Debug, Subcommand)]
-enum Command {
+#[derive(Copy, Clone, Debug, Subcommand)]
+pub enum Command {
     /// Generate a registration file
     GenerateRegistration,
     /// Start the server
@@ -40,7 +42,14 @@ async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
 
     let args = Args::parse();
-    println!("{:?}", args);
+    let config = ConfigFile::read_from_file(&args.config)?;
+
+    match args.subcommand {
+        Command::GenerateRegistration => {
+            registration::generate_registration_cmd(&config, &args)?;
+        }
+        Command::Start => todo!(),
+    }
 
     Ok(())
 }
