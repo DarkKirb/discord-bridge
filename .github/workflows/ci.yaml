@@ -120,6 +120,8 @@ jobs:
   clippy:
     needs: coverage
     runs-on: ubuntu-latest
+    env:
+      CLIPPY_FLAGS: -Dfuture-incompatible -Ddeprecated-in-future -Welided-lifetimes-in-paths -Wexplicit-outlives-requirements -Dkeyword-idents -Wmacro-use-extern-crate -Wmeta-variable-misuse -Dmissing-abi -Dmissing-copy-implementations -Dmissing-debug-implementations -Wmissing-docs -Wnoop-method-call -Wpointer-structural-match -Wsingle-use-lifetimes -Wtrivial-casts -Wtrivial-numeric-casts -Wunreachable-pub -Dunsafe-op-in-unsafe-fn -Wunused-crate-dependencies -Wunused-extern-crates -Wunused-import-braces -Wunused-lifetimes -Wunused-qualifications -Wvariant-size-differences -Dclippy::all -Wclippy::nursery -Wclippy::pedantic -Wclippy::cargo -Wclippy::clone_on_ref_ptr -Fclippy::default_union_representation -Dclippy::expect_used -Wclippy::get_unwrap -Wclippy::if_then_some_else_none -Dclippy::lossy_float_literal -Wclippy::map_err_ignore -Wclippy::missing_docs_in_private_items -Wclippy::panic -Fclippy::panic_in_result_fn -Wclippy::rc_buffer -Dclippy::rc_mutex -Wclippy::str_to_string -Wclippy::try_err -Dclippy::undocumented_unsafe_blocks -Dclippy::unwrap_used
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -139,19 +141,19 @@ jobs:
           components: clippy
       - uses: actions-rs/cargo@v1
         with:
-          command: clippy
-          args: -- -D warnings -D clippy::all -D clippy::nursery -D clippy::pedantic -D clippy::cargo -F clippy::default_union_representation -D clippy::expect_used -D clippy::lossy_float_literal -D clippy::panic -F clippy::panic_in_result_fn -D clippy::rc_mutex -D clippy::undocumented_unsafe_blocks -D clippy::unwrap_used
-      - uses: actions-rs/cargo@v1
-        with:
           command: install
           args: clippy-sarif sarif-fmt
-      - run: cargo clippy --message-format=json | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt
+      - run: cargo clippy --message-format=json -- $CLIPPY_FLAGS | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt
         continue-on-error: true
       - name: Upload analysis results to GitHub
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: rust-clippy-results.sarif
           wait-for-processing: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- $CLIPPY_FLAGS
   docs:
     needs: coverage
     runs-on: ubuntu-latest
