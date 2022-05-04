@@ -37,4 +37,4 @@ features = ["e2e-encryption", "eyre", "sled", "markdown", "rustls-tls"]
 [dependencies.matrix-sdk]
 git = "https://github.com/matrix-org/matrix-rust-sdk"
 default-features = false
-features = ["qrcode", "image-rayon"]
+features = ["image-rayon"]
