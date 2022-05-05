@@ -4,7 +4,8 @@ use std::collections::BTreeSet;
 use std::sync::Arc;
 
 use color_eyre::Result;
-use matrix_sdk::deserialized_responses::{MemberEvent, SyncRoomEvent};
+use futures::TryStreamExt;
+use matrix_sdk::deserialized_responses::MemberEvent;
 use matrix_sdk::media::MediaRequest;
 use matrix_sdk::ruma::events::presence::PresenceEvent;
 use matrix_sdk::ruma::events::receipt::Receipt;
@@ -18,9 +19,8 @@ use matrix_sdk::ruma::receipt::ReceiptType;
 use matrix_sdk::ruma::serde::Raw;
 use matrix_sdk::ruma::{EventId, MxcUri, OwnedEventId, OwnedUserId, RoomId, UserId};
 use matrix_sdk::{async_trait, RoomInfo, StateChanges, StoreError};
-use matrix_sdk_base::store::{BoxStream, Result as StateResult};
+use matrix_sdk_base::store::Result as StateResult;
 use matrix_sdk_base::StateStore;
-use serde::Serialize;
 use sqlx::types::Json;
 use sqlx::{query, PgPool, Postgres, Transaction};
 
@@ -578,6 +578,178 @@ impl PostgresStateStore {
         txn.commit().await?;
         Ok(())
     }
+
+    /// Retrieves the filter id given a filter name
+    ///
+    /// # Errors
+    /// This function will return an error if the database query fails
+    async fn get_filter(&self, filter_name: &str) -> Result<Option<String>> {
+        let row = query!(
+            r#"
+                SELECT filter_id
+                FROM statestore_filters
+                WHERE filter_name = $1
+                LIMIT 1
+            "#,
+            filter_name
+        )
+        .fetch_optional(&*self.pool)
+        .await?;
+
+        Ok(row.map(|v| v.filter_id))
+    }
+
+    /// Retrieves the most recent sync token from the database
+    ///
+    /// # Errors
+    /// This function will return an error if the database query fails
+    async fn get_sync_token(&self) -> Result<Option<String>> {
+        let row = query!(
+            r#"
+                SELECT misc_value
+                FROM statestore_misc
+                WHERE misc_key = 'sync_token'
+                LIMIT 1
+            "#
+        )
+        .fetch_optional(&*self.pool)
+        .await?;
+
+        Ok(row.map(|v| v.misc_value))
+    }
+
+    /// Retrieves the stored presence event for a user
+    ///
+    /// # Errors
+    /// This function will return an error if the database query fails
+    async fn get_presence_event(
+        &self,
+        user_id: impl AsRef<str> + Send,
+    ) -> Result<Option<Raw<PresenceEvent>>> {
+        let row = query!(
+            r#"
+                SELECT presence_event as "presence_event: Json<Raw<PresenceEvent>>"
+                FROM statestore_presence
+                WHERE user_id = $1
+                LIMIT 1
+            "#,
+            user_id.as_ref()
+        )
+        .fetch_optional(&*self.pool)
+        .await?;
+
+        Ok(row.map(|v| v.presence_event.0))
+    }
+
+    /// Retrieves the stored state event for a room
+    ///
+    /// # Errors
+    /// This function will return an error if the database query fails
+    async fn get_state_event(
+        &self,
+        room_id: impl AsRef<str> + Send,
+        event_type: impl AsRef<str> + Send,
+        state_key: impl AsRef<str> + Send,
+    ) -> Result<Option<Raw<AnySyncStateEvent>>> {
+        let row = query!(
+            r#"
+                SELECT state_event as "state_event: Json<Raw<AnySyncStateEvent>>"
+                FROM statestore_room_state
+                WHERE room_id = $1
+                AND event_type = $2
+                AND state_key = $3
+                LIMIT 1
+            "#,
+            room_id.as_ref(),
+            event_type.as_ref(),
+            state_key.as_ref()
+        )
+        .fetch_optional(&*self.pool)
+        .await?;
+
+        Ok(row.map(|v| v.state_event.0))
+    }
+
+    /// Retrieves all stored state event of a type for a room
+    ///
+    /// # Errors
+    /// This function will return an error if the database query fails
+    async fn get_state_events(
+        &self,
+        room_id: impl AsRef<str> + Send,
+        event_type: impl AsRef<str> + Send,
+    ) -> Result<Vec<Raw<AnySyncStateEvent>>> {
+        let mut rows = query!(
+            r#"
+                SELECT state_event as "state_event: Json<Raw<AnySyncStateEvent>>"
+                FROM statestore_room_state
+                WHERE room_id = $1
+                AND event_type = $2
+            "#,
+            room_id.as_ref(),
+            event_type.as_ref()
+        )
+        .fetch(&*self.pool);
+        let mut res_vec = Vec::new();
+
+        while let Some(row) = rows.try_next().await? {
+            res_vec.push(row.state_event.0);
+        }
+
+        Ok(res_vec)
+    }
+
+    /// Retrieves a user profile
+    ///
+    /// # Errors
+    /// This function will return an error if the database query fails
+    async fn get_profile(
+        &self,
+        room_id: impl AsRef<str> + Send,
+        user_id: impl AsRef<str> + Send,
+    ) -> Result<Option<RoomMemberEventContent>> {
+        let row = query!(
+            r#"
+                SELECT profile_data as "profile_data: Json<RoomMemberEventContent>"
+                FROM statestore_profiles
+                WHERE room_id = $1
+                AND user_id = $2
+                LIMIT 1
+            "#,
+            room_id.as_ref(),
+            user_id.as_ref()
+        )
+        .fetch_optional(&*self.pool)
+        .await?;
+
+        Ok(row.map(|v| v.profile_data.0))
+    }
+
+    /// Retrieves a member event for a statekey and room id
+    ///
+    /// # Errors
+    /// This function will return an error if the database query fails
+    async fn get_member_event(
+        &self,
+        room_id: impl AsRef<str> + Send,
+        state_key: impl AsRef<str> + Send,
+    ) -> Result<Option<MemberEvent>> {
+        let row = query!(
+            r#"
+                SELECT sync_content as "member_event: Json<MemberEvent>"
+                FROM statestore_members
+                WHERE room_id = $1
+                AND user_id = $2
+                LIMIT 1
+            "#,
+            room_id.as_ref(),
+            state_key.as_ref()
+        )
+        .fetch_optional(&*self.pool)
+        .await?;
+
+        Ok(row.map(|v| v.member_event.0))
+    }
 }
 
 impl From<Arc<PgPool>> for PostgresStateStore {
@@ -617,12 +789,18 @@ impl StateStore for PostgresStateStore {
     ///
     /// * `filter_name` - The name that was used to store the filter id.
     async fn get_filter(&self, filter_name: &str) -> StateResult<Option<String>> {
-        todo!();
+        Ok(self
+            .get_filter(filter_name)
+            .await
+            .map_err(|e| StoreError::Backend(e.into()))?)
     }
 
     /// Get the last stored sync token.
     async fn get_sync_token(&self) -> StateResult<Option<String>> {
-        todo!();
+        Ok(self
+            .get_sync_token()
+            .await
+            .map_err(|e| StoreError::Backend(e.into()))?)
     }
 
     /// Get the stored presence event for the given user.
@@ -635,7 +813,10 @@ impl StateStore for PostgresStateStore {
         &self,
         user_id: &UserId,
     ) -> StateResult<Option<Raw<PresenceEvent>>> {
-        todo!();
+        Ok(self
+            .get_presence_event(user_id)
+            .await
+            .map_err(|e| StoreError::Backend(e.into()))?)
     }
 
     /// Get a state event out of the state store.
@@ -651,7 +832,10 @@ impl StateStore for PostgresStateStore {
         event_type: StateEventType,
         state_key: &str,
     ) -> StateResult<Option<Raw<AnySyncStateEvent>>> {
-        todo!();
+        Ok(self
+            .get_state_event(room_id, event_type.to_string(), state_key)
+            .await
+            .map_err(|e| StoreError::Backend(e.into()))?)
     }
 
     /// Get a list of state events for a given room and `StateEventType`.
@@ -666,7 +850,10 @@ impl StateStore for PostgresStateStore {
         room_id: &RoomId,
         event_type: StateEventType,
     ) -> StateResult<Vec<Raw<AnySyncStateEvent>>> {
-        todo!();
+        Ok(self
+            .get_state_events(room_id, event_type.to_string())
+            .await
+            .map_err(|e| StoreError::Backend(e.into()))?)
     }
 
     /// Get the current profile for the given user in the given room.
@@ -681,7 +868,10 @@ impl StateStore for PostgresStateStore {
         room_id: &RoomId,
         user_id: &UserId,
     ) -> StateResult<Option<RoomMemberEventContent>> {
-        todo!();
+        Ok(self
+            .get_profile(room_id, user_id)
+            .await
+            .map_err(|e| StoreError::Backend(e.into()))?)
     }
 
     /// Get a raw `MemberEvent` for the given state key in the given room id.
@@ -696,7 +886,10 @@ impl StateStore for PostgresStateStore {
         room_id: &RoomId,
         state_key: &UserId,
     ) -> StateResult<Option<MemberEvent>> {
-        todo!();
+        Ok(self
+            .get_member_event(room_id, state_key)
+            .await
+            .map_err(|e| StoreError::Backend(e.into()))?)
     }
 
     /// Get all the user ids of members for a given room.

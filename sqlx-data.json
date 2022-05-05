@@ -1,5 +1,43 @@
 {
   "db": "PostgreSQL",
+  "0faac63b72e8f0e714e9fe95e6b20191d0ef1ff255f936ecc239bf3ccf7d58f1": {
+    "describe": {
+      "columns": [
+        {
+          "name": "presence_event: Json<Raw<PresenceEvent>>",
+          "ordinal": 0,
+          "type_info": "Jsonb"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      }
+    },
+    "query": "\n                SELECT presence_event as \"presence_event: Json<Raw<PresenceEvent>>\"\n                FROM statestore_presence\n                WHERE user_id = $1\n                LIMIT 1\n            "
+  },
+  "1725d80fac2493b0ca781e055a1782f114f01cd5f640f6fb0585c22f76f31068": {
+    "describe": {
+      "columns": [
+        {
+          "name": "misc_value",
+          "ordinal": 0,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "\n                SELECT misc_value\n                FROM statestore_misc\n                WHERE misc_key = 'sync_token'\n                LIMIT 1\n            "
+  },
   "1aa4699e498c716542a5e1633241e33617b9ef19978b11425ac5ef09542c3858": {
     "describe": {
       "columns": [],
@@ -110,6 +148,47 @@
     },
     "query": "\n                INSERT INTO statestore_members\n                    (room_id, user_id, sync_content)\n                VALUES\n                    ($1, $2, $3)\n                ON CONFLICT (room_id, user_id)\n                    DO UPDATE SET sync_content = EXCLUDED.sync_content\n            "
   },
+  "70776173ed1c9ec938fb1b5bf745cbd083f78ef0ad3d5fbba338d7acb1d100c0": {
+    "describe": {
+      "columns": [
+        {
+          "name": "member_event: Json<MemberEvent>",
+          "ordinal": 0,
+          "type_info": "Jsonb"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text"
+        ]
+      }
+    },
+    "query": "\n                SELECT sync_content as \"member_event: Json<MemberEvent>\"\n                FROM statestore_members\n                WHERE room_id = $1\n                AND user_id = $2\n                LIMIT 1\n            "
+  },
+  "89ad846fb8aad4a50d066feb6703cef0a23472679bf09fb6e96cf02055db5d1b": {
+    "describe": {
+      "columns": [
+        {
+          "name": "filter_id",
+          "ordinal": 0,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      }
+    },
+    "query": "\n                SELECT filter_id\n                FROM statestore_filters\n                WHERE filter_name = $1\n                LIMIT 1\n            "
+  },
   "912bceafa6069aa06451e18f5e33f14b070e39e2afe74dc41acb4b8fc8ddf676": {
     "describe": {
       "columns": [],
@@ -136,6 +215,27 @@
       }
     },
     "query": "\n            DELETE FROM statestore_room_user_ids\n            WHERE\n                (room_id = $1)\n            AND (user_id = $2)\n        "
+  },
+  "b7e3ef7a63acfb15309f11ac23bf817862b6d2beb64d86127a35341749cd9eef": {
+    "describe": {
+      "columns": [
+        {
+          "name": "state_event: Json<Raw<AnySyncStateEvent>>",
+          "ordinal": 0,
+          "type_info": "Jsonb"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text"
+        ]
+      }
+    },
+    "query": "\n                SELECT state_event as \"state_event: Json<Raw<AnySyncStateEvent>>\"\n                FROM statestore_room_state\n                WHERE room_id = $1\n                AND event_type = $2\n            "
   },
   "be4b2d86d13ed684b590ca09226d6e06a627e9badb5b430c6455bf64efad8f69": {
     "describe": {
@@ -164,6 +264,49 @@
       }
     },
     "query": "\n                INSERT INTO statestore_stripped_room_state\n                    (room_id, event_type, state_key, state_event)\n                VALUES\n                    ($1, $2, $3, $4)\n                ON CONFLICT (room_id, event_type, state_key)\n                    DO UPDATE SET state_event = EXCLUDED.state_event\n            "
+  },
+  "d4cf2bb0f16bb1627875cd900afb0792cf8114233e1d8822434bc82aebd02c6e": {
+    "describe": {
+      "columns": [
+        {
+          "name": "state_event: Json<Raw<AnySyncStateEvent>>",
+          "ordinal": 0,
+          "type_info": "Jsonb"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text",
+          "Text"
+        ]
+      }
+    },
+    "query": "\n                SELECT state_event as \"state_event: Json<Raw<AnySyncStateEvent>>\"\n                FROM statestore_room_state\n                WHERE room_id = $1\n                AND event_type = $2\n                AND state_key = $3\n                LIMIT 1\n            "
+  },
+  "df259441e70056a7c6bd5848ca4cf33a91838937375195ba6c1fa2f0de5c250f": {
+    "describe": {
+      "columns": [
+        {
+          "name": "profile_data: Json<RoomMemberEventContent>",
+          "ordinal": 0,
+          "type_info": "Jsonb"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text"
+        ]
+      }
+    },
+    "query": "\n                SELECT profile_data as \"profile_data: Json<RoomMemberEventContent>\"\n                FROM statestore_profiles\n                WHERE room_id = $1\n                AND user_id = $2\n                LIMIT 1\n            "
   },
   "e8f3204019718779ef19363b3c7c3dca8755128df9ff5c4875a6f3be328b33e9": {
     "describe": {
