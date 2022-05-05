@@ -39,23 +39,16 @@ url = { version = "2.2.2", features = ["serde"] }
 
 [dependencies.matrix-sdk-appservice]
 git = "https://github.com/DarkKirb/matrix-rust-sdk"
-branch = "eyre-support"
+branch = "backend-box-error-error"
 default-features = false
 features = ["e2e-encryption", "eyre", "markdown", "rustls-tls"]
 
 [dependencies.matrix-sdk]
 git = "https://github.com/DarkKirb/matrix-rust-sdk"
-branch = "eyre-support"
+branch = "backend-box-error-error"
 default-features = false
 features = ["image-rayon"]
 
 [dependencies.matrix-sdk-base]
 git = "https://github.com/DarkKirb/matrix-rust-sdk"
-branch = "eyre-support"
-default-features = false
-features = ["eyre"]
-
-[patch.crates-io.anyhow]
-git = "https://github.com/yaahc/eyre"
-tag = "v0.6.8"
-package = "eyre"
+branch = "backend-box-error-error"

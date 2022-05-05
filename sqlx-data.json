@@ -13,6 +13,20 @@
     },
     "query": "\n            INSERT INTO\n                statestore_misc (misc_key, misc_value)\n            VALUES ($1, $2)\n            ON CONFLICT (misc_key)\n                DO UPDATE SET misc_value = EXCLUDED.misc_value\n            "
   },
+  "20d2f06f35c1c3dc210c271f1daaa5d3c84799d6b34b415ef1e61ba97749a205": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text",
+          "Jsonb"
+        ]
+      }
+    },
+    "query": "\n                INSERT INTO statestore_room_account_data\n                    (room_id, event_type, account_data)\n                VALUES\n                    ($1, $2, $3)\n                ON CONFLICT (room_id, event_type)\n                    DO UPDATE SET account_data = EXCLUDED.account_data\n            "
+  },
   "29223f8ef07eb496803841bb0e1674b71fc95710fd774259847725860e21cd9b": {
     "describe": {
       "columns": [],
@@ -27,6 +41,35 @@
     },
     "query": "\n                INSERT INTO\n                    statestore_room_user_ids (room_id, user_id, user_status)\n                VALUES ($1, $2, $3)\n                ON CONFLICT (room_id, user_id)\n                    DO UPDATE SET user_status = EXCLUDED.user_status\n            "
   },
+  "2a6ce0cb17f60b97c9955aaa3789502f7c5673c3b3c4a4fbb9b5646d07315ac6": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Jsonb"
+        ]
+      }
+    },
+    "query": "\n                INSERT INTO statestore_stripped_room_infos\n                    (room_id, room_info)\n                VALUES\n                    ($1, $2)\n                ON CONFLICT (room_id)\n                    DO UPDATE SET room_info = EXCLUDED.room_info\n            "
+  },
+  "35b6c9bc31a823ac617c90b8ee698b6f85adb2640cb7af720a323612ec47ce10": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text",
+          "Text",
+          "Text",
+          "Jsonb"
+        ]
+      }
+    },
+    "query": "\n                INSERT INTO statestore_room_receipts\n                    (room_id, receipt_type, user_id, event_id, receipt)\n                VALUES\n                    ($1, $2, $3, $4, $5)\n                ON CONFLICT (room_id, receipt_type, user_id)\n                    DO UPDATE SET event_id = EXCLUDED.event_id, receipt = EXCLUDED.receipt\n            "
+  },
   "377ae5a3330a1379a01d91d4ed49303a038c2b1fbacdc0e7d7464cfb1fb9a3a5": {
     "describe": {
       "columns": [],
@@ -39,6 +82,19 @@
       }
     },
     "query": "\n            INSERT INTO\n                statestore_filters\n                    (filter_name, filter_id)\n            VALUES ($1, $2)\n            ON CONFLICT (filter_name)\n                DO UPDATE SET filter_id = EXCLUDED.filter_id\n        "
+  },
+  "67ff9e18eff1c723d6033eb878ff5cf57cd56785036f2325d28c8fc2ec599798": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Jsonb"
+        ]
+      }
+    },
+    "query": "\n                INSERT INTO statestore_accountdata\n                    (event_type, event_data)\n                VALUES\n                    ($1, $2)\n                ON CONFLICT (event_type)\n                    DO UPDATE SET event_data = EXCLUDED.event_data\n            "
   },
   "6f7b85e4d461ae37346981ea5e1e6ff5e6c29688ab0f2224c9135a3f6a9feaf6": {
     "describe": {
@@ -54,6 +110,20 @@
     },
     "query": "\n                INSERT INTO statestore_members\n                    (room_id, user_id, sync_content)\n                VALUES\n                    ($1, $2, $3)\n                ON CONFLICT (room_id, user_id)\n                    DO UPDATE SET sync_content = EXCLUDED.sync_content\n            "
   },
+  "912bceafa6069aa06451e18f5e33f14b070e39e2afe74dc41acb4b8fc8ddf676": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text",
+          "Text"
+        ]
+      }
+    },
+    "query": "\n                INSERT INTO statestore_displaynames\n                    (room_id, user_id, displayname)\n                VALUES\n                    ($1, $2, $3)\n                ON CONFLICT (room_id, user_id)\n                    DO UPDATE SET displayname = EXCLUDED.displayname\n            "
+  },
   "a2578cfb278fdd679d1edf9e1b22ed5811c5088953660cf04947d8917d97757f": {
     "describe": {
       "columns": [],
@@ -66,5 +136,61 @@
       }
     },
     "query": "\n            DELETE FROM statestore_room_user_ids\n            WHERE\n                (room_id = $1)\n            AND (user_id = $2)\n        "
+  },
+  "be4b2d86d13ed684b590ca09226d6e06a627e9badb5b430c6455bf64efad8f69": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Jsonb"
+        ]
+      }
+    },
+    "query": "\n                INSERT INTO statestore_presence\n                    (user_id, presence_event)\n                VALUES\n                    ($1, $2)\n                ON CONFLICT (user_id)\n                    DO UPDATE SET presence_event = EXCLUDED.presence_event\n            "
+  },
+  "ca103036b1139a7ae31f1a03c5977bf233d41b0c142c00c52cfbd343e1c94a21": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text",
+          "Text",
+          "Jsonb"
+        ]
+      }
+    },
+    "query": "\n                INSERT INTO statestore_stripped_room_state\n                    (room_id, event_type, state_key, state_event)\n                VALUES\n                    ($1, $2, $3, $4)\n                ON CONFLICT (room_id, event_type, state_key)\n                    DO UPDATE SET state_event = EXCLUDED.state_event\n            "
+  },
+  "e8f3204019718779ef19363b3c7c3dca8755128df9ff5c4875a6f3be328b33e9": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text",
+          "Jsonb"
+        ]
+      }
+    },
+    "query": "\n                INSERT INTO statestore_profiles\n                    (room_id, user_id, profile_data)\n                VALUES\n                    ($1, $2, $3)\n                ON CONFLICT (room_id, user_id)\n                    DO UPDATE SET profile_data = EXCLUDED.profile_data\n            "
+  },
+  "ea1a624b938c66c10bd00e3ca9697766dab1763b1d3fbcefe7209849d6b33131": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text",
+          "Jsonb"
+        ]
+      }
+    },
+    "query": "\n                INSERT INTO statestore_stripped_members\n                    (room_id, state_key, member_event)\n                VALUES\n                    ($1, $2, $3)\n                ON CONFLICT (room_id, state_key)\n                    DO UPDATE SET member_event = EXCLUDED.member_event\n            "
   }
 }
