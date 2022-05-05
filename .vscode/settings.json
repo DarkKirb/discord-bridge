@@ -46,5 +46,7 @@
     "-Wclippy::try_err",
     "-Dclippy::undocumented_unsafe_blocks",
     "-Dclippy::unwrap_used",
+    "-Aclippy::type-repetition-in-bounds",
+    "-Aclippy::trait-duplication-in-bounds"
   ]
 }

@@ -1,0 +1,70 @@
+{
+  "db": "PostgreSQL",
+  "1aa4699e498c716542a5e1633241e33617b9ef19978b11425ac5ef09542c3858": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text"
+        ]
+      }
+    },
+    "query": "\n            INSERT INTO\n                statestore_misc (misc_key, misc_value)\n            VALUES ($1, $2)\n            ON CONFLICT (misc_key)\n                DO UPDATE SET misc_value = EXCLUDED.misc_value\n            "
+  },
+  "29223f8ef07eb496803841bb0e1674b71fc95710fd774259847725860e21cd9b": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text",
+          "Text"
+        ]
+      }
+    },
+    "query": "\n                INSERT INTO\n                    statestore_room_user_ids (room_id, user_id, user_status)\n                VALUES ($1, $2, $3)\n                ON CONFLICT (room_id, user_id)\n                    DO UPDATE SET user_status = EXCLUDED.user_status\n            "
+  },
+  "377ae5a3330a1379a01d91d4ed49303a038c2b1fbacdc0e7d7464cfb1fb9a3a5": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text"
+        ]
+      }
+    },
+    "query": "\n            INSERT INTO\n                statestore_filters\n                    (filter_name, filter_id)\n            VALUES ($1, $2)\n            ON CONFLICT (filter_name)\n                DO UPDATE SET filter_id = EXCLUDED.filter_id\n        "
+  },
+  "6f7b85e4d461ae37346981ea5e1e6ff5e6c29688ab0f2224c9135a3f6a9feaf6": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text",
+          "Jsonb"
+        ]
+      }
+    },
+    "query": "\n                INSERT INTO statestore_members\n                    (room_id, user_id, sync_content)\n                VALUES\n                    ($1, $2, $3)\n                ON CONFLICT (room_id, user_id)\n                    DO UPDATE SET sync_content = EXCLUDED.sync_content\n            "
+  },
+  "a2578cfb278fdd679d1edf9e1b22ed5811c5088953660cf04947d8917d97757f": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text"
+        ]
+      }
+    },
+    "query": "\n            DELETE FROM statestore_room_user_ids\n            WHERE\n                (room_id = $1)\n            AND (user_id = $2)\n        "
+  }
+}

@@ -7,7 +7,10 @@ use color_eyre::eyre::Result;
 
 pub mod config;
 pub use config::File as ConfigFile;
+use matrix_sdk_appservice::{AppService, AppServiceRegistration};
+use tracing::debug;
 
+pub mod psql_store;
 pub mod registration;
 
 /// Application service to connect discord to matrix
@@ -34,6 +37,23 @@ pub enum Command {
     Start,
 }
 
+/// Runs the actual server
+///
+/// # Errors
+/// This function will return an error if reading registration information fails
+async fn run_app(config: &ConfigFile, args: &Args) -> Result<()> {
+    debug!("Reading registration data");
+    let registration = AppServiceRegistration::try_from_yaml_file(&args.registration)?;
+    debug!("Creating appservice instance");
+    let _appservice = AppService::new(
+        config.homeserver.address.as_str(),
+        config.homeserver.domain.clone(),
+        registration,
+    )
+    .await?;
+    Ok(())
+}
+
 /// Main program entrypoint
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -48,7 +68,9 @@ async fn main() -> Result<()> {
         Command::GenerateRegistration => {
             registration::generate_registration_cmd(&config, &args)?;
         }
-        Command::Start => todo!(),
+        Command::Start => {
+            run_app(&config, &args).await?;
+        }
     }
 
     Ok(())
