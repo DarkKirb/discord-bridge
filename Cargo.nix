@@ -227,6 +227,13 @@ in
     };
   });
   
+  "registry+https://github.com/rust-lang/crates.io-index".async-once-cell."0.3.0" = overridableMkRustCrate (profileName: rec {
+    name = "async-once-cell";
+    version = "0.3.0";
+    registry = "registry+https://github.com/rust-lang/crates.io-index";
+    src = fetchCratesIo { inherit name version; sha256 = "8e52116ee51c72c07a9db74c6f95213c95c462408bb5a689772d623a62b96471"; };
+  });
+  
   "registry+https://github.com/rust-lang/crates.io-index".async-stream."0.3.3" = overridableMkRustCrate (profileName: rec {
     name = "async-stream";
     version = "0.3.3";
@@ -697,7 +704,7 @@ in
     registry = "registry+https://github.com/rust-lang/crates.io-index";
     src = fetchCratesIo { inherit name version; sha256 = "59a6001667ab124aebae2a495118e11d30984c3a653e99d86d58971708cf5e4b"; };
     dependencies = {
-      ${ if hostPlatform.config == "aarch64-linux-android" || hostPlatform.config == "aarch64-apple-darwin" || hostPlatform.parsed.cpu.name == "aarch64" && hostPlatform.parsed.kernel.name == "linux" then "libc" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".libc."0.2.125" { inherit profileName; };
+      ${ if hostPlatform.config == "aarch64-apple-darwin" || hostPlatform.config == "aarch64-linux-android" || hostPlatform.parsed.cpu.name == "aarch64" && hostPlatform.parsed.kernel.name == "linux" then "libc" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".libc."0.2.125" { inherit profileName; };
     };
   });
   
@@ -994,9 +1001,8 @@ in
       color_eyre = rustPackages."registry+https://github.com/rust-lang/crates.io-index".color-eyre."0.6.1" { inherit profileName; };
       dotenv = rustPackages."registry+https://github.com/rust-lang/crates.io-index".dotenv."0.15.0" { inherit profileName; };
       futures = rustPackages."registry+https://github.com/rust-lang/crates.io-index".futures."0.3.21" { inherit profileName; };
-      matrix_sdk = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk."0.4.1" { inherit profileName; };
-      matrix_sdk_appservice = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-appservice."0.1.0" { inherit profileName; };
-      matrix_sdk_base = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-base."0.4.1" { inherit profileName; };
+      matrix_sdk = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk."0.4.1" { inherit profileName; };
+      matrix_sdk_appservice = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-appservice."0.1.0" { inherit profileName; };
       rand = rustPackages."registry+https://github.com/rust-lang/crates.io-index".rand."0.8.5" { inherit profileName; };
       serde = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde."1.0.137" { inherit profileName; };
       serde_yaml = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_yaml."0.8.24" { inherit profileName; };
@@ -1815,7 +1821,7 @@ in
     ];
     dependencies = {
       cfg_if = rustPackages."registry+https://github.com/rust-lang/crates.io-index".cfg-if."1.0.0" { inherit profileName; };
-      ${ if hostPlatform.config == "wasm32-unknown-emscripten" || hostPlatform.config == "wasm32-unknown-unknown" || hostPlatform.config == "asmjs-unknown-emscripten" then "js_sys" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".js-sys."0.3.57" { inherit profileName; };
+      ${ if hostPlatform.config == "asmjs-unknown-emscripten" || hostPlatform.config == "wasm32-unknown-unknown" || hostPlatform.config == "wasm32-unknown-emscripten" then "js_sys" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".js-sys."0.3.57" { inherit profileName; };
       ${ if hostPlatform.config == "wasm32-unknown-unknown" || hostPlatform.config == "asmjs-unknown-emscripten" || hostPlatform.config == "wasm32-unknown-emscripten" then "wasm_bindgen_rs" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".wasm-bindgen."0.2.80" { inherit profileName; };
       ${ if hostPlatform.config == "asmjs-unknown-emscripten" || hostPlatform.config == "wasm32-unknown-emscripten" || hostPlatform.config == "wasm32-unknown-unknown" then "web_sys" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".web-sys."0.3.57" { inherit profileName; };
     };
@@ -1985,16 +1991,15 @@ in
     src = fetchCratesIo { inherit name version; sha256 = "a3e378b66a060d48947b590737b30a1be76706c8dd7b8ba0f2fe3989c68a853f"; };
   });
   
-  "git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk."0.4.1" = overridableMkRustCrate (profileName: rec {
+  "git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk."0.4.1" = overridableMkRustCrate (profileName: rec {
     name = "matrix-sdk";
     version = "0.4.1";
-    registry = "git+https://github.com/DarkKirb/matrix-rust-sdk";
+    registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/DarkKirb/matrix-rust-sdk;
+      url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk";
       version = "0.4.1";
-      rev = "e00623188737e49414fb7e26f1ff36582fc65f10";
-      ref = "backend-box-error-error";};
+      rev = "be2a818c84b21980e9219fa8bd4c15d3a9c588c2";};
     features = builtins.concatLists [
       [ "appservice" ]
       [ "e2e-encryption" ]
@@ -2007,6 +2012,7 @@ in
     ];
     dependencies = {
       anymap2 = rustPackages."registry+https://github.com/rust-lang/crates.io-index".anymap2."0.13.0" { inherit profileName; };
+      ${ if hostPlatform.parsed.cpu.name == "wasm32" then "async_once_cell" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".async-once-cell."0.3.0" { inherit profileName; };
       async_stream = rustPackages."registry+https://github.com/rust-lang/crates.io-index".async-stream."0.3.3" { inherit profileName; };
       async_trait = buildRustPackages."registry+https://github.com/rust-lang/crates.io-index".async-trait."0.1.53" { profileName = "__noProfile"; };
       ${ if !(hostPlatform.parsed.cpu.name == "wasm32") then "backoff" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".backoff."0.4.0" { inherit profileName; };
@@ -2018,10 +2024,10 @@ in
       futures_util = rustPackages."registry+https://github.com/rust-lang/crates.io-index".futures-util."0.3.21" { inherit profileName; };
       http = rustPackages."registry+https://github.com/rust-lang/crates.io-index".http."0.2.7" { inherit profileName; };
       image = rustPackages."registry+https://github.com/rust-lang/crates.io-index".image."0.24.2" { inherit profileName; };
-      matrix_sdk_base = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-base."0.4.1" { inherit profileName; };
-      matrix_sdk_common = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-common."0.4.1" { inherit profileName; };
-      matrix_sdk_indexeddb = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-indexeddb."0.1.0" { inherit profileName; };
-      matrix_sdk_sled = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-sled."0.1.0" { inherit profileName; };
+      matrix_sdk_base = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-base."0.4.1" { inherit profileName; };
+      matrix_sdk_common = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-common."0.4.1" { inherit profileName; };
+      matrix_sdk_indexeddb = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-indexeddb."0.1.0" { inherit profileName; };
+      matrix_sdk_sled = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-sled."0.1.0" { inherit profileName; };
       mime = rustPackages."registry+https://github.com/rust-lang/crates.io-index".mime."0.3.16" { inherit profileName; };
       reqwest = rustPackages."registry+https://github.com/rust-lang/crates.io-index".reqwest."0.11.10" { inherit profileName; };
       ruma = rustPackages."registry+https://github.com/rust-lang/crates.io-index".ruma."0.6.1" { inherit profileName; };
@@ -2036,16 +2042,15 @@ in
     };
   });
   
-  "git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-appservice."0.1.0" = overridableMkRustCrate (profileName: rec {
+  "git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-appservice."0.1.0" = overridableMkRustCrate (profileName: rec {
     name = "matrix-sdk-appservice";
     version = "0.1.0";
-    registry = "git+https://github.com/DarkKirb/matrix-rust-sdk";
+    registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/DarkKirb/matrix-rust-sdk;
+      url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-appservice";
       version = "0.1.0";
-      rev = "e00623188737e49414fb7e26f1ff36582fc65f10";
-      ref = "backend-box-error-error";};
+      rev = "be2a818c84b21980e9219fa8bd4c15d3a9c588c2";};
     features = builtins.concatLists [
       [ "e2e-encryption" ]
       [ "eyre" ]
@@ -2055,7 +2060,7 @@ in
     dependencies = {
       dashmap = rustPackages."registry+https://github.com/rust-lang/crates.io-index".dashmap."5.3.3" { inherit profileName; };
       http = rustPackages."registry+https://github.com/rust-lang/crates.io-index".http."0.2.7" { inherit profileName; };
-      matrix_sdk = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk."0.4.1" { inherit profileName; };
+      matrix_sdk = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk."0.4.1" { inherit profileName; };
       percent_encoding = rustPackages."registry+https://github.com/rust-lang/crates.io-index".percent-encoding."2.1.0" { inherit profileName; };
       regex = rustPackages."registry+https://github.com/rust-lang/crates.io-index".regex."1.5.5" { inherit profileName; };
       ruma = rustPackages."registry+https://github.com/rust-lang/crates.io-index".ruma."0.6.1" { inherit profileName; };
@@ -2069,16 +2074,15 @@ in
     };
   });
   
-  "git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-base."0.4.1" = overridableMkRustCrate (profileName: rec {
+  "git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-base."0.4.1" = overridableMkRustCrate (profileName: rec {
     name = "matrix-sdk-base";
     version = "0.4.1";
-    registry = "git+https://github.com/DarkKirb/matrix-rust-sdk";
+    registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/DarkKirb/matrix-rust-sdk;
+      url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-base";
       version = "0.4.1";
-      rev = "e00623188737e49414fb7e26f1ff36582fc65f10";
-      ref = "backend-box-error-error";};
+      rev = "be2a818c84b21980e9219fa8bd4c15d3a9c588c2";};
     features = builtins.concatLists [
       [ "default" ]
       [ "e2e-encryption" ]
@@ -2092,8 +2096,8 @@ in
       futures_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".futures-core."0.3.21" { inherit profileName; };
       futures_util = rustPackages."registry+https://github.com/rust-lang/crates.io-index".futures-util."0.3.21" { inherit profileName; };
       lru = rustPackages."registry+https://github.com/rust-lang/crates.io-index".lru."0.7.5" { inherit profileName; };
-      matrix_sdk_common = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-common."0.4.1" { inherit profileName; };
-      matrix_sdk_crypto = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-crypto."0.4.1" { inherit profileName; };
+      matrix_sdk_common = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-common."0.4.1" { inherit profileName; };
+      matrix_sdk_crypto = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-crypto."0.4.1" { inherit profileName; };
       ${ if hostPlatform.parsed.cpu.name == "wasm32" || !(hostPlatform.parsed.cpu.name == "wasm32") then "ruma" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".ruma."0.6.1" { inherit profileName; };
       serde = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde."1.0.137" { inherit profileName; };
       serde_json = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_json."1.0.81" { inherit profileName; };
@@ -2103,20 +2107,19 @@ in
     };
   });
   
-  "git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-common."0.4.1" = overridableMkRustCrate (profileName: rec {
+  "git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-common."0.4.1" = overridableMkRustCrate (profileName: rec {
     name = "matrix-sdk-common";
     version = "0.4.1";
-    registry = "git+https://github.com/DarkKirb/matrix-rust-sdk";
+    registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/DarkKirb/matrix-rust-sdk;
+      url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-common";
       version = "0.4.1";
-      rev = "e00623188737e49414fb7e26f1ff36582fc65f10";
-      ref = "backend-box-error-error";};
+      rev = "be2a818c84b21980e9219fa8bd4c15d3a9c588c2";};
     dependencies = {
       ${ if hostPlatform.parsed.cpu.name == "wasm32" then "async_lock" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".async-lock."2.5.0" { inherit profileName; };
       ${ if hostPlatform.parsed.cpu.name == "wasm32" then "futures_util" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".futures-util."0.3.21" { inherit profileName; };
-      ${ if !(hostPlatform.parsed.cpu.name == "wasm32") || hostPlatform.parsed.cpu.name == "wasm32" then "instant" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".instant."0.1.12" { inherit profileName; };
+      ${ if hostPlatform.parsed.cpu.name == "wasm32" || !(hostPlatform.parsed.cpu.name == "wasm32") then "instant" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".instant."0.1.12" { inherit profileName; };
       ruma = rustPackages."registry+https://github.com/rust-lang/crates.io-index".ruma."0.6.1" { inherit profileName; };
       serde = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde."1.0.137" { inherit profileName; };
       ${ if !(hostPlatform.parsed.cpu.name == "wasm32") then "tokio" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".tokio."1.18.1" { inherit profileName; };
@@ -2124,16 +2127,15 @@ in
     };
   });
   
-  "git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-crypto."0.4.1" = overridableMkRustCrate (profileName: rec {
+  "git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-crypto."0.4.1" = overridableMkRustCrate (profileName: rec {
     name = "matrix-sdk-crypto";
     version = "0.4.1";
-    registry = "git+https://github.com/DarkKirb/matrix-rust-sdk";
+    registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/DarkKirb/matrix-rust-sdk;
+      url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-crypto";
       version = "0.4.1";
-      rev = "e00623188737e49414fb7e26f1ff36582fc65f10";
-      ref = "backend-box-error-error";};
+      rev = "be2a818c84b21980e9219fa8bd4c15d3a9c588c2";};
     features = builtins.concatLists [
       [ "default" ]
     ];
@@ -2148,7 +2150,7 @@ in
       dashmap = rustPackages."registry+https://github.com/rust-lang/crates.io-index".dashmap."5.3.3" { inherit profileName; };
       futures_util = rustPackages."registry+https://github.com/rust-lang/crates.io-index".futures-util."0.3.21" { inherit profileName; };
       hmac = rustPackages."registry+https://github.com/rust-lang/crates.io-index".hmac."0.12.1" { inherit profileName; };
-      matrix_sdk_common = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-common."0.4.1" { inherit profileName; };
+      matrix_sdk_common = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-common."0.4.1" { inherit profileName; };
       pbkdf2 = rustPackages."registry+https://github.com/rust-lang/crates.io-index".pbkdf2."0.11.0" { inherit profileName; };
       rand = rustPackages."registry+https://github.com/rust-lang/crates.io-index".rand."0.8.5" { inherit profileName; };
       ${ if !(hostPlatform.parsed.cpu.name == "wasm32") || hostPlatform.parsed.cpu.name == "wasm32" then "ruma" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".ruma."0.6.1" { inherit profileName; };
@@ -2157,21 +2159,20 @@ in
       sha2 = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sha2."0.10.2" { inherit profileName; };
       thiserror = rustPackages."registry+https://github.com/rust-lang/crates.io-index".thiserror."1.0.31" { inherit profileName; };
       tracing = rustPackages."registry+https://github.com/rust-lang/crates.io-index".tracing."0.1.34" { inherit profileName; };
-      ${ if hostPlatform.parsed.cpu.name == "wasm32" || !(hostPlatform.parsed.cpu.name == "wasm32") then "vodozemac" else null } = rustPackages."git+https://github.com/matrix-org/vodozemac".vodozemac."0.1.0" { inherit profileName; };
+      ${ if !(hostPlatform.parsed.cpu.name == "wasm32") || hostPlatform.parsed.cpu.name == "wasm32" then "vodozemac" else null } = rustPackages."git+https://github.com/matrix-org/vodozemac".vodozemac."0.1.0" { inherit profileName; };
       zeroize = rustPackages."registry+https://github.com/rust-lang/crates.io-index".zeroize."1.3.0" { inherit profileName; };
     };
   });
   
-  "git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-indexeddb."0.1.0" = overridableMkRustCrate (profileName: rec {
+  "git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-indexeddb."0.1.0" = overridableMkRustCrate (profileName: rec {
     name = "matrix-sdk-indexeddb";
     version = "0.1.0";
-    registry = "git+https://github.com/DarkKirb/matrix-rust-sdk";
+    registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/DarkKirb/matrix-rust-sdk;
+      url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-indexeddb";
       version = "0.1.0";
-      rev = "e00623188737e49414fb7e26f1ff36582fc65f10";
-      ref = "backend-box-error-error";};
+      rev = "be2a818c84b21980e9219fa8bd4c15d3a9c588c2";};
     features = builtins.concatLists [
       [ "e2e-encryption" ]
       [ "matrix-sdk-crypto" ]
@@ -2184,9 +2185,9 @@ in
       futures_util = rustPackages."registry+https://github.com/rust-lang/crates.io-index".futures-util."0.3.21" { inherit profileName; };
       ${ if hostPlatform.parsed.cpu.name == "wasm32" then "getrandom" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".getrandom."0.2.6" { inherit profileName; };
       indexed_db_futures = rustPackages."registry+https://github.com/rust-lang/crates.io-index".indexed_db_futures."0.2.3" { inherit profileName; };
-      matrix_sdk_base = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-base."0.4.1" { inherit profileName; };
-      matrix_sdk_crypto = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-crypto."0.4.1" { inherit profileName; };
-      matrix_sdk_store_encryption = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-store-encryption."0.1.0" { inherit profileName; };
+      matrix_sdk_base = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-base."0.4.1" { inherit profileName; };
+      matrix_sdk_crypto = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-crypto."0.4.1" { inherit profileName; };
+      matrix_sdk_store_encryption = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-store-encryption."0.1.0" { inherit profileName; };
       ruma = rustPackages."registry+https://github.com/rust-lang/crates.io-index".ruma."0.6.1" { inherit profileName; };
       serde = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde."1.0.137" { inherit profileName; };
       serde_json = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_json."1.0.81" { inherit profileName; };
@@ -2197,16 +2198,15 @@ in
     };
   });
   
-  "git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-sled."0.1.0" = overridableMkRustCrate (profileName: rec {
+  "git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-sled."0.1.0" = overridableMkRustCrate (profileName: rec {
     name = "matrix-sdk-sled";
     version = "0.1.0";
-    registry = "git+https://github.com/DarkKirb/matrix-rust-sdk";
+    registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/DarkKirb/matrix-rust-sdk;
+      url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-sled";
       version = "0.1.0";
-      rev = "e00623188737e49414fb7e26f1ff36582fc65f10";
-      ref = "backend-box-error-error";};
+      rev = "be2a818c84b21980e9219fa8bd4c15d3a9c588c2";};
     features = builtins.concatLists [
       [ "crypto-store" ]
       [ "matrix-sdk-base" ]
@@ -2218,10 +2218,10 @@ in
       dashmap = rustPackages."registry+https://github.com/rust-lang/crates.io-index".dashmap."5.3.3" { inherit profileName; };
       futures_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".futures-core."0.3.21" { inherit profileName; };
       futures_util = rustPackages."registry+https://github.com/rust-lang/crates.io-index".futures-util."0.3.21" { inherit profileName; };
-      matrix_sdk_base = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-base."0.4.1" { inherit profileName; };
-      matrix_sdk_common = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-common."0.4.1" { inherit profileName; };
-      matrix_sdk_crypto = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-crypto."0.4.1" { inherit profileName; };
-      matrix_sdk_store_encryption = rustPackages."git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-store-encryption."0.1.0" { inherit profileName; };
+      matrix_sdk_base = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-base."0.4.1" { inherit profileName; };
+      matrix_sdk_common = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-common."0.4.1" { inherit profileName; };
+      matrix_sdk_crypto = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-crypto."0.4.1" { inherit profileName; };
+      matrix_sdk_store_encryption = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-store-encryption."0.1.0" { inherit profileName; };
       ruma = rustPackages."registry+https://github.com/rust-lang/crates.io-index".ruma."0.6.1" { inherit profileName; };
       serde = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde."1.0.137" { inherit profileName; };
       serde_json = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_json."1.0.81" { inherit profileName; };
@@ -2232,16 +2232,15 @@ in
     };
   });
   
-  "git+https://github.com/DarkKirb/matrix-rust-sdk".matrix-sdk-store-encryption."0.1.0" = overridableMkRustCrate (profileName: rec {
+  "git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-store-encryption."0.1.0" = overridableMkRustCrate (profileName: rec {
     name = "matrix-sdk-store-encryption";
     version = "0.1.0";
-    registry = "git+https://github.com/DarkKirb/matrix-rust-sdk";
+    registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/DarkKirb/matrix-rust-sdk;
+      url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-store-encryption";
       version = "0.1.0";
-      rev = "e00623188737e49414fb7e26f1ff36582fc65f10";
-      ref = "backend-box-error-error";};
+      rev = "be2a818c84b21980e9219fa8bd4c15d3a9c588c2";};
     dependencies = {
       blake3 = rustPackages."registry+https://github.com/rust-lang/crates.io-index".blake3."1.3.1" { inherit profileName; };
       chacha20poly1305 = rustPackages."registry+https://github.com/rust-lang/crates.io-index".chacha20poly1305."0.9.0" { inherit profileName; };
@@ -4932,10 +4931,10 @@ in
       [ "default" ]
     ];
     dependencies = {
-      ${ if hostPlatform.config == "aarch64-uwp-windows-msvc" || hostPlatform.config == "aarch64-pc-windows-msvc" then "windows_aarch64_msvc" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".windows_aarch64_msvc."0.36.1" { inherit profileName; };
+      ${ if hostPlatform.config == "aarch64-pc-windows-msvc" || hostPlatform.config == "aarch64-uwp-windows-msvc" then "windows_aarch64_msvc" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".windows_aarch64_msvc."0.36.1" { inherit profileName; };
       ${ if hostPlatform.config == "i686-uwp-windows-gnu" || hostPlatform.config == "i686-pc-windows-gnu" then "windows_i686_gnu" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".windows_i686_gnu."0.36.1" { inherit profileName; };
-      ${ if hostPlatform.config == "i686-pc-windows-msvc" || hostPlatform.config == "i686-uwp-windows-msvc" then "windows_i686_msvc" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".windows_i686_msvc."0.36.1" { inherit profileName; };
-      ${ if hostPlatform.config == "x86_64-pc-windows-gnu" || hostPlatform.config == "x86_64-uwp-windows-gnu" then "windows_x86_64_gnu" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".windows_x86_64_gnu."0.36.1" { inherit profileName; };
+      ${ if hostPlatform.config == "i686-uwp-windows-msvc" || hostPlatform.config == "i686-pc-windows-msvc" then "windows_i686_msvc" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".windows_i686_msvc."0.36.1" { inherit profileName; };
+      ${ if hostPlatform.config == "x86_64-uwp-windows-gnu" || hostPlatform.config == "x86_64-pc-windows-gnu" then "windows_x86_64_gnu" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".windows_x86_64_gnu."0.36.1" { inherit profileName; };
       ${ if hostPlatform.config == "x86_64-uwp-windows-msvc" || hostPlatform.config == "x86_64-pc-windows-msvc" then "windows_x86_64_msvc" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".windows_x86_64_msvc."0.36.1" { inherit profileName; };
     };
   });
