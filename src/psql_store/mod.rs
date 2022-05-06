@@ -1,28 +1,30 @@
 //! matrix-sdk store based on Postgres
 
-use std::collections::BTreeSet;
-use std::sync::Arc;
+use std::{collections::BTreeSet, sync::Arc};
 
 use color_eyre::Result;
 use futures::TryStreamExt;
-use matrix_sdk::deserialized_responses::MemberEvent;
-use matrix_sdk::media::MediaRequest;
-use matrix_sdk::ruma::events::presence::PresenceEvent;
-use matrix_sdk::ruma::events::receipt::Receipt;
-use matrix_sdk::ruma::events::room::member::{MembershipState, RoomMemberEventContent};
-use matrix_sdk::ruma::events::{
-    AnyGlobalAccountDataEvent, AnyRoomAccountDataEvent, AnyStrippedStateEvent, AnySyncStateEvent,
-    GlobalAccountDataEventType, OriginalSyncStateEvent, RoomAccountDataEventType, StateEventType,
-    StrippedStateEvent,
+use matrix_sdk::{
+    async_trait,
+    deserialized_responses::MemberEvent,
+    media::MediaRequest,
+    ruma::{
+        events::{
+            presence::PresenceEvent,
+            receipt::Receipt,
+            room::member::{MembershipState, RoomMemberEventContent},
+            AnyGlobalAccountDataEvent, AnyRoomAccountDataEvent, AnyStrippedStateEvent,
+            AnySyncStateEvent, GlobalAccountDataEventType, OriginalSyncStateEvent,
+            RoomAccountDataEventType, StateEventType, StrippedStateEvent,
+        },
+        receipt::ReceiptType,
+        serde::Raw,
+        EventId, MxcUri, OwnedEventId, OwnedUserId, RoomId, UserId,
+    },
+    RoomInfo, StateChanges, StoreError,
 };
-use matrix_sdk::ruma::receipt::ReceiptType;
-use matrix_sdk::ruma::serde::Raw;
-use matrix_sdk::ruma::{EventId, MxcUri, OwnedEventId, OwnedUserId, RoomId, UserId};
-use matrix_sdk::{async_trait, RoomInfo, StateChanges, StoreError};
-use matrix_sdk_base::store::Result as StateResult;
-use matrix_sdk_base::StateStore;
-use sqlx::types::Json;
-use sqlx::{query, PgPool, Postgres, Transaction};
+use matrix_sdk_base::{store::Result as StateResult, StateStore};
+use sqlx::{query, types::Json, PgPool, Postgres, Transaction};
 
 /// State store for postgresql databases
 #[derive(Clone, Debug)]
