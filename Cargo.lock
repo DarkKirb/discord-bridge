@@ -142,6 +142,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "async-once-cell"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8e52116ee51c72c07a9db74c6f95213c95c462408bb5a689772d623a62b96471"
+
+[[package]]
 name = "async-stream"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -693,7 +699,6 @@ dependencies = [
  "futures",
  "matrix-sdk",
  "matrix-sdk-appservice",
- "matrix-sdk-base",
  "rand 0.8.5",
  "serde",
  "serde_yaml",
@@ -1380,9 +1385,10 @@ checksum = "a3e378b66a060d48947b590737b30a1be76706c8dd7b8ba0f2fe3989c68a853f"
 [[package]]
 name = "matrix-sdk"
 version = "0.4.1"
-source = "git+https://github.com/DarkKirb/matrix-rust-sdk?branch=backend-box-error-error#e00623188737e49414fb7e26f1ff36582fc65f10"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#be2a818c84b21980e9219fa8bd4c15d3a9c588c2"
 dependencies = [
  "anymap2",
+ "async-once-cell",
  "async-stream",
  "async-trait",
  "backoff",
@@ -1414,7 +1420,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-appservice"
 version = "0.1.0"
-source = "git+https://github.com/DarkKirb/matrix-rust-sdk?branch=backend-box-error-error#e00623188737e49414fb7e26f1ff36582fc65f10"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#be2a818c84b21980e9219fa8bd4c15d3a9c588c2"
 dependencies = [
  "dashmap",
  "http",
@@ -1434,7 +1440,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-base"
 version = "0.4.1"
-source = "git+https://github.com/DarkKirb/matrix-rust-sdk?branch=backend-box-error-error#e00623188737e49414fb7e26f1ff36582fc65f10"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#be2a818c84b21980e9219fa8bd4c15d3a9c588c2"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -1456,7 +1462,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-common"
 version = "0.4.1"
-source = "git+https://github.com/DarkKirb/matrix-rust-sdk?branch=backend-box-error-error#e00623188737e49414fb7e26f1ff36582fc65f10"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#be2a818c84b21980e9219fa8bd4c15d3a9c588c2"
 dependencies = [
  "async-lock",
  "futures-util",
@@ -1470,7 +1476,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-crypto"
 version = "0.4.1"
-source = "git+https://github.com/DarkKirb/matrix-rust-sdk?branch=backend-box-error-error#e00623188737e49414fb7e26f1ff36582fc65f10"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#be2a818c84b21980e9219fa8bd4c15d3a9c588c2"
 dependencies = [
  "aes 0.8.1",
  "aes-gcm",
@@ -1498,7 +1504,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-indexeddb"
 version = "0.1.0"
-source = "git+https://github.com/DarkKirb/matrix-rust-sdk?branch=backend-box-error-error#e00623188737e49414fb7e26f1ff36582fc65f10"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#be2a818c84b21980e9219fa8bd4c15d3a9c588c2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1522,7 +1528,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-sled"
 version = "0.1.0"
-source = "git+https://github.com/DarkKirb/matrix-rust-sdk?branch=backend-box-error-error#e00623188737e49414fb7e26f1ff36582fc65f10"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#be2a818c84b21980e9219fa8bd4c15d3a9c588c2"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -1545,7 +1551,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-store-encryption"
 version = "0.1.0"
-source = "git+https://github.com/DarkKirb/matrix-rust-sdk?branch=backend-box-error-error#e00623188737e49414fb7e26f1ff36582fc65f10"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#be2a818c84b21980e9219fa8bd4c15d3a9c588c2"
 dependencies = [
  "blake3",
  "chacha20poly1305",

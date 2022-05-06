@@ -39,17 +39,11 @@ tracing-subscriber = "0.3.11"
 url = { version = "2.2.2", features = ["serde"] }
 
 [dependencies.matrix-sdk-appservice]
-git = "https://github.com/DarkKirb/matrix-rust-sdk"
-branch = "backend-box-error-error"
+git = "https://github.com/matrix-org/matrix-rust-sdk"
 default-features = false
 features = ["e2e-encryption", "eyre", "markdown", "rustls-tls"]
 
 [dependencies.matrix-sdk]
-git = "https://github.com/DarkKirb/matrix-rust-sdk"
-branch = "backend-box-error-error"
+git = "https://github.com/matrix-org/matrix-rust-sdk"
 default-features = false
 features = ["image-rayon"]
-
-[dependencies.matrix-sdk-base]
-git = "https://github.com/DarkKirb/matrix-rust-sdk"
-branch = "backend-box-error-error"
