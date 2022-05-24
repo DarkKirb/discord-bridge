@@ -10,7 +10,6 @@ pub use config::File as ConfigFile;
 use matrix_sdk_appservice::{AppService, AppServiceRegistration};
 use tracing::debug;
 
-pub mod psql_store;
 pub mod registration;
 
 /// Application service to connect discord to matrix

@@ -22,13 +22,13 @@
   outputs = { self, nixpkgs, flake-utils, rust-overlay, cargo2nix, ... } @ inputs: flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
     let
       overlays = [
-        cargo2nix.overlay.${system}
+        cargo2nix.overlay
         (import rust-overlay)
       ];
       pkgs = import nixpkgs {
         inherit system overlays;
       };
-      rustPkgs = pkgs.rustBuilder.makePackageSet' {
+      rustPkgs = pkgs.rustBuilder.makePackageSet {
         packageFun = import ./Cargo.nix;
         rustChannel = "1.60.0";
         packageOverrides = pkgs: pkgs.rustBuilder.overrides.all;
