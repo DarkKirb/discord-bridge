@@ -1945,7 +1945,7 @@ in
       url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk";
       version = "0.5.0";
-      rev = "fa9c91fb0ea2ae823a4c05fc9f6759bdebeead4a";};
+      rev = "2ff6497604c33ab0acec38753cd0fe33106acc31";};
     features = builtins.concatLists [
       [ "appservice" ]
       [ "e2e-encryption" ]
@@ -1996,7 +1996,7 @@ in
       url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-appservice";
       version = "0.1.0";
-      rev = "fa9c91fb0ea2ae823a4c05fc9f6759bdebeead4a";};
+      rev = "2ff6497604c33ab0acec38753cd0fe33106acc31";};
     features = builtins.concatLists [
       [ "e2e-encryption" ]
       [ "eyre" ]
@@ -2028,7 +2028,7 @@ in
       url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-base";
       version = "0.5.1";
-      rev = "fa9c91fb0ea2ae823a4c05fc9f6759bdebeead4a";};
+      rev = "2ff6497604c33ab0acec38753cd0fe33106acc31";};
     features = builtins.concatLists [
       [ "default" ]
       [ "e2e-encryption" ]
@@ -2044,6 +2044,7 @@ in
       lru = rustPackages."registry+https://github.com/rust-lang/crates.io-index".lru."0.7.5" { inherit profileName; };
       matrix_sdk_common = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-common."0.5.0" { inherit profileName; };
       matrix_sdk_crypto = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-crypto."0.5.0" { inherit profileName; };
+      once_cell = rustPackages."registry+https://github.com/rust-lang/crates.io-index".once_cell."1.10.0" { inherit profileName; };
       ${ if !(hostPlatform.parsed.cpu.name == "wasm32") || hostPlatform.parsed.cpu.name == "wasm32" then "ruma" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".ruma."0.6.3" { inherit profileName; };
       serde = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde."1.0.137" { inherit profileName; };
       serde_json = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_json."1.0.81" { inherit profileName; };
@@ -2061,7 +2062,7 @@ in
       url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-common";
       version = "0.5.0";
-      rev = "fa9c91fb0ea2ae823a4c05fc9f6759bdebeead4a";};
+      rev = "2ff6497604c33ab0acec38753cd0fe33106acc31";};
     dependencies = {
       ${ if hostPlatform.parsed.cpu.name == "wasm32" then "async_lock" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".async-lock."2.5.0" { inherit profileName; };
       ${ if hostPlatform.parsed.cpu.name == "wasm32" then "futures_util" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".futures-util."0.3.21" { inherit profileName; };
@@ -2081,7 +2082,7 @@ in
       url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-crypto";
       version = "0.5.0";
-      rev = "fa9c91fb0ea2ae823a4c05fc9f6759bdebeead4a";};
+      rev = "2ff6497604c33ab0acec38753cd0fe33106acc31";};
     features = builtins.concatLists [
       [ "default" ]
     ];
@@ -2104,7 +2105,7 @@ in
       sha2 = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sha2."0.10.2" { inherit profileName; };
       thiserror = rustPackages."registry+https://github.com/rust-lang/crates.io-index".thiserror."1.0.31" { inherit profileName; };
       tracing = rustPackages."registry+https://github.com/rust-lang/crates.io-index".tracing."0.1.34" { inherit profileName; };
-      ${ if !(hostPlatform.parsed.cpu.name == "wasm32") || hostPlatform.parsed.cpu.name == "wasm32" then "vodozemac" else null } = rustPackages."registry+https://github.com/rust-lang/crates.io-index".vodozemac."0.2.0" { inherit profileName; };
+      ${ if !(hostPlatform.parsed.cpu.name == "wasm32") || hostPlatform.parsed.cpu.name == "wasm32" then "vodozemac" else null } = rustPackages."git+https://github.com/matrix-org/vodozemac/".vodozemac."0.2.0" { inherit profileName; };
       zeroize = rustPackages."registry+https://github.com/rust-lang/crates.io-index".zeroize."1.3.0" { inherit profileName; };
     };
   });
@@ -2117,7 +2118,7 @@ in
       url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-indexeddb";
       version = "0.1.0";
-      rev = "fa9c91fb0ea2ae823a4c05fc9f6759bdebeead4a";};
+      rev = "2ff6497604c33ab0acec38753cd0fe33106acc31";};
     features = builtins.concatLists [
       [ "e2e-encryption" ]
       [ "matrix-sdk-crypto" ]
@@ -2151,7 +2152,7 @@ in
       url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-sled";
       version = "0.1.0";
-      rev = "fa9c91fb0ea2ae823a4c05fc9f6759bdebeead4a";};
+      rev = "2ff6497604c33ab0acec38753cd0fe33106acc31";};
     features = builtins.concatLists [
       [ "crypto-store" ]
       [ "matrix-sdk-base" ]
@@ -2185,7 +2186,7 @@ in
       url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-store-encryption";
       version = "0.1.0";
-      rev = "fa9c91fb0ea2ae823a4c05fc9f6759bdebeead4a";};
+      rev = "2ff6497604c33ab0acec38753cd0fe33106acc31";};
     dependencies = {
       blake3 = rustPackages."registry+https://github.com/rust-lang/crates.io-index".blake3."1.3.1" { inherit profileName; };
       chacha20poly1305 = rustPackages."registry+https://github.com/rust-lang/crates.io-index".chacha20poly1305."0.9.0" { inherit profileName; };
@@ -4419,11 +4420,15 @@ in
     src = fetchCratesIo { inherit name version; sha256 = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"; };
   });
   
-  "registry+https://github.com/rust-lang/crates.io-index".vodozemac."0.2.0" = overridableMkRustCrate (profileName: rec {
+  "git+https://github.com/matrix-org/vodozemac/".vodozemac."0.2.0" = overridableMkRustCrate (profileName: rec {
     name = "vodozemac";
     version = "0.2.0";
-    registry = "registry+https://github.com/rust-lang/crates.io-index";
-    src = fetchCratesIo { inherit name version; sha256 = "3a42265bb5d65ba2807e477741ca3147a58d25ee5463860491fe0c24f4d21c1a"; };
+    registry = "git+https://github.com/matrix-org/vodozemac/";
+    src = fetchCrateGit {
+      url = https://github.com/matrix-org/vodozemac/;
+      name = "vodozemac";
+      version = "0.2.0";
+      rev = "d0e744287a14319c2a9148fef3747548c740fc36";};
     features = builtins.concatLists [
       [ "default" ]
       [ "js" ]
