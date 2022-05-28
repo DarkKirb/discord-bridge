@@ -43,6 +43,7 @@
           cargo2nix.packages.${system}.cargo2nix
           cargo-audit
           sqlx-cli
+          github-cli
         ];
       };
       packages = rec {
