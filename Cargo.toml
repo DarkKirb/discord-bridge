@@ -44,6 +44,9 @@ default-features = false
 features = ["e2e-encryption", "eyre", "markdown", "rustls-tls"]
 
 [dependencies.matrix-sdk]
-git = "https://github.com/matrix-org/matrix-rust-sdk"
+version = "0.5.0"
 default-features = false
 features = ["image-rayon"]
+
+[patch."https://github.com/matrix-org/matrix-rust-sdk"]
+matrix-sdk = "0.5.0"
