@@ -1,0 +1,20 @@
+# Homeserver configuration
+homeserver:
+  # Address the homeserver is reachable over
+  address: https://matrix.example.com
+  # Domain name of the homeserver
+  domain: example.com
+  # Supported unstable MSCs
+  # This enables some improved functionality
+  mscs:
+    - 2246 # Asynchronous media uploads
+    - 2448 # Blurhash
+    - 2676 # Message editing
+    - 2677 # Reactions
+    - 3440 # Threading (will bridge discord threads as matrix threads and vice versa)
+# Bridge config
+bridge:
+  listen_address: ["0.0.0.0"] # Addresses to listen on
+  port: 58913 # Port to listen on
+  bridge_url: "http://localhost:58913/" # Address for the home server
+  prefix: dev # Prefix for all rooms and users

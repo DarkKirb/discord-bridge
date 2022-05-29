@@ -3,7 +3,7 @@
 use std::fs;
 
 use crate::ConfigFile;
-use color_eyre::Result;
+use anyhow::Result;
 use matrix_sdk::ruma::api::appservice::{Namespace, Namespaces, Registration, RegistrationInit};
 use rand::{
     distributions::{Alphanumeric, DistString},
@@ -20,10 +20,13 @@ fn generate_registration(config: &ConfigFile) -> Registration {
     let mut namespaces = Namespaces::new();
 
     namespaces.users = vec![
-        Namespace::new(true, "@_discord_.*".to_owned()),
-        Namespace::new(true, "@_discordbot.*".to_owned()),
+        Namespace::new(true, format!("@{}_discord_.*", config.bridge.prefix)),
+        Namespace::new(true, format!("@{}_discordbot_.*", config.bridge.prefix)),
     ];
-    namespaces.aliases = vec![Namespace::new(true, "#_discord_.*".to_owned())];
+    namespaces.aliases = vec![Namespace::new(
+        true,
+        format!("#{}_discord_.*", config.bridge.prefix),
+    )];
 
     let mut rng = thread_rng();
     RegistrationInit {
@@ -31,7 +34,7 @@ fn generate_registration(config: &ConfigFile) -> Registration {
         url: config.bridge.bridge_url.as_str().to_owned(),
         as_token: generate_token(&mut rng),
         hs_token: generate_token(&mut rng),
-        sender_localpart: "_discordbot".to_owned(),
+        sender_localpart: format!("{}_discordbot", config.bridge.prefix),
         namespaces,
         rate_limited: Some(false),
         protocols: Some(vec!["com.discord".to_owned()]),
@@ -77,11 +80,13 @@ mod tests {
             homeserver: config::Homeserver {
                 address: Url::from_str("https://matrix.chir.rs/").expect("valid URL"),
                 domain: "chir.rs".to_owned(),
+                mscs: vec![],
             },
             bridge: config::Bridge {
                 listen_address: vec![IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0))],
                 port: 58913,
                 bridge_url: Url::from_str("http://localhost:58913/").expect("valid URL"),
+                prefix: "".to_owned(),
             },
         };
         drop(generate_registration(&config));

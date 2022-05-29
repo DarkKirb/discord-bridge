@@ -2,7 +2,7 @@
 
 use std::{fs, net::IpAddr, path::Path};
 
-use color_eyre::Result;
+use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use url::Url;
 
@@ -33,6 +33,10 @@ pub struct Homeserver {
     pub address: Url,
     /// Domain name of homeserver, for example `chir.rs`
     pub domain: String,
+    /// Supported MSCs
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub mscs: Vec<u16>,
 }
 
 /// Bridge Configuration
@@ -44,4 +48,8 @@ pub struct Bridge {
     pub port: u16,
     /// Bridge URL
     pub bridge_url: Url,
+    /// Bridge username prefix
+    #[serde(default)]
+    #[serde(skip_serializing_if = "String::is_empty")]
+    pub prefix: String,
 }
