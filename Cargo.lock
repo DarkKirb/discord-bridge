@@ -1297,7 +1297,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-appservice"
 version = "0.1.0"
-source = "git+https://github.com/matrix-org/matrix-rust-sdk#2ff6497604c33ab0acec38753cd0fe33106acc31"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#a11633381bf9232178c4522b1ff51ca03d081fc3"
 dependencies = [
  "dashmap",
  "http",
