@@ -12,7 +12,7 @@ use rand::{
 
 /// Generate a random token
 fn generate_token<R: Rng + CryptoRng>(r: &mut R) -> String {
-    Alphanumeric.sample_string(r, 32)
+    Alphanumeric.sample_string(r, 64)
 }
 
 /// Generate a registration
@@ -20,12 +20,27 @@ fn generate_registration(config: &ConfigFile) -> Registration {
     let mut namespaces = Namespaces::new();
 
     namespaces.users = vec![
-        Namespace::new(true, format!("@{}_discord_.*", config.bridge.prefix)),
-        Namespace::new(true, format!("@{}_discordbot", config.bridge.prefix)),
+        Namespace::new(
+            true,
+            format!(
+                "@{}_discord_.*:{}",
+                config.bridge.prefix, config.homeserver.domain
+            ),
+        ),
+        Namespace::new(
+            true,
+            format!(
+                "@{}_discordbot:{}",
+                config.bridge.prefix, config.homeserver.domain
+            ),
+        ),
     ];
     namespaces.aliases = vec![Namespace::new(
         true,
-        format!("#{}_discord_.*", config.bridge.prefix),
+        format!(
+            "#{}_discord_.*:{}",
+            config.bridge.prefix, config.homeserver.domain
+        ),
     )];
 
     let mut rng = thread_rng();
@@ -34,7 +49,7 @@ fn generate_registration(config: &ConfigFile) -> Registration {
         url: config.bridge.bridge_url.as_str().to_owned(),
         as_token: generate_token(&mut rng),
         hs_token: generate_token(&mut rng),
-        sender_localpart: format!("{}_discordbot", config.bridge.prefix),
+        sender_localpart: generate_token(&mut rng),
         namespaces,
         rate_limited: Some(false),
         protocols: Some(vec!["com.discord".to_owned()]),

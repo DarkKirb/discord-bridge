@@ -1,9 +1,9 @@
 # Homeserver configuration
 homeserver:
   # Address the homeserver is reachable over
-  address: https://matrix.example.com
+  address: https://matrix.chir.rs
   # Domain name of the homeserver
-  domain: example.com
+  domain: chir.rs
   # Supported unstable MSCs
   # This enables some improved functionality
   mscs:
@@ -16,7 +16,7 @@ homeserver:
 bridge:
   listen_address: ["0.0.0.0"] # Addresses to listen on
   port: 58913 # Port to listen on
-  bridge_url: "http://localhost:58913/" # Address for the home server
+  bridge_url: "http://nutty-noon.int.chir.rs:58913/" # Address for the home server
   prefix: dev # Prefix for all rooms and users
   db:
     socket: /run/postgresql

@@ -70,7 +70,7 @@ fn setup_sentry() -> Result<ClientInitGuard> {
 /// # Errors
 /// This function will return an error if running the server fails
 async fn run_app(config: &ConfigFile, args: &Args) -> Result<()> {
-    let _app = App::new(config, args).await?;
+    App::new(config, args).await?.run().await?;
     Ok(())
 }
 
