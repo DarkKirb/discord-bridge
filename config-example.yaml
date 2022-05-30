@@ -18,3 +18,8 @@ bridge:
   port: 58913 # Port to listen on
   bridge_url: "http://localhost:58913/" # Address for the home server
   prefix: dev # Prefix for all rooms and users
+  db:
+    socket: /run/postgresql
+    user: darkkirb
+    database: darkkirb
+    sslmode: disable

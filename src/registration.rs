@@ -21,7 +21,7 @@ fn generate_registration(config: &ConfigFile) -> Registration {
 
     namespaces.users = vec![
         Namespace::new(true, format!("@{}_discord_.*", config.bridge.prefix)),
-        Namespace::new(true, format!("@{}_discordbot_.*", config.bridge.prefix)),
+        Namespace::new(true, format!("@{}_discordbot", config.bridge.prefix)),
     ];
     namespaces.aliases = vec![Namespace::new(
         true,
@@ -63,7 +63,7 @@ mod tests {
     use rand::thread_rng;
     use url::Url;
 
-    use crate::config;
+    use crate::config::{self, DBOptions};
 
     use super::*;
 
@@ -87,6 +87,7 @@ mod tests {
                 port: 58913,
                 bridge_url: Url::from_str("http://localhost:58913/").expect("valid URL"),
                 prefix: "".to_owned(),
+                db: DBOptions::default(),
             },
         };
         drop(generate_registration(&config));

@@ -24,6 +24,7 @@ codegen-units = 1
 anyhow = "1.0.57"
 clap = { version = "3.1.18", features = ["derive"] }
 dotenv = "0.15.0"
+educe = "0.4.19"
 futures = "0.3.21"
 once_cell = "1.12.0"
 rand = "0.8.5"
@@ -42,12 +43,17 @@ url = { version = "2.2.2", features = ["serde"] }
 [dependencies.matrix-sdk-appservice]
 git = "https://github.com/matrix-org/matrix-rust-sdk"
 default-features = false
-features = ["e2e-encryption", "eyre", "markdown", "rustls-tls"]
+features = ["eyre", "markdown", "rustls-tls"]
 
 [dependencies.matrix-sdk]
 version = "0.5.0"
 default-features = false
 features = ["image-rayon"]
+
+[dependencies.matrix-sdk-sql]
+version = "0.1.0-beta.2"
+default-features = false
+features = ["postgres", "rustls"]
 
 [dependencies.sentry]
 version = "0.26.0"
