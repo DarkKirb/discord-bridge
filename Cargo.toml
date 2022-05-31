@@ -29,6 +29,7 @@ futures = "0.3.21"
 once_cell = "1.12.0"
 rand = "0.8.5"
 serde = { version = "1.0.137", features = ["derive"] }
+serde_json = "1.0.81"
 serde_yaml = "0.8.24"
 sqlx = { version = "0.5.13", features = [
   "postgres",
@@ -43,12 +44,12 @@ url = { version = "2.2.2", features = ["serde"] }
 [dependencies.matrix-sdk-appservice]
 git = "https://github.com/matrix-org/matrix-rust-sdk"
 default-features = false
-features = ["eyre", "markdown", "rustls-tls"]
+features = ["eyre", "markdown", "rustls-tls", "e2e-encryption"]
 
 [dependencies.matrix-sdk]
 version = "0.5.0"
 default-features = false
-features = ["image-rayon"]
+features = ["image-rayon", "e2e-encryption"]
 
 [dependencies.matrix-sdk-sql]
 version = "0.1.0-beta.2"

@@ -1,17 +1,24 @@
 //! App
 
-use std::{str::FromStr, sync::Arc};
+use std::{str::FromStr, sync::Arc, time::Duration};
 
 use crate::{Args, ConfigFile};
-use anyhow::{anyhow, Result};
-use futures::StreamExt;
+use anyhow::Result;
 use matrix_sdk::{
-    config::{StoreConfig, SyncSettings},
+    config::{RequestConfig, StoreConfig, SyncSettings},
+    deserialized_responses::EncryptionInfo,
     event_handler::Ctx,
     room::Room,
     ruma::{
-        events::room::member::{MembershipState, OriginalSyncRoomMemberEvent},
-        ServerName, UserId,
+        api::client::{
+            session::login::{
+                self,
+                v3::{ApplicationService, LoginInfo},
+            },
+            uiaa::UserIdentifier,
+        },
+        events::room::{member::StrippedRoomMemberEvent, message::SyncRoomMessageEvent},
+        DeviceId, OwnedDeviceId, OwnedUserId, ServerName, UserId,
     },
     Client, Session,
 };
@@ -20,8 +27,11 @@ use sqlx::{
     postgres::{PgConnectOptions, PgSslMode},
     ConnectOptions, PgPool,
 };
-use tokio::sync::mpsc::{self, UnboundedSender};
-use tracing::{debug, info, log::LevelFilter};
+use tokio::{
+    sync::mpsc::{self, UnboundedSender},
+    time::sleep,
+};
+use tracing::{debug, error, info, log::LevelFilter, warn};
 
 /// Queue events that need to be handled
 #[derive(Clone, Debug)]
@@ -42,9 +52,58 @@ pub struct App {
     queue: UnboundedSender<QueueEvent>,
     /// discordbot client
     client: Client,
+    /// discordbot user id
+    user_id: OwnedUserId,
 }
 
 impl App {
+    /// Returns the device id or creates a new one
+    async fn device_id(self: &Arc<Self>) -> Result<OwnedDeviceId> {
+        let device_id = self.client.store().get_custom_value(b"device_id").await?;
+        if let Some(device_id) = device_id {
+            let device_id = String::from_utf8(device_id)?;
+            Ok(OwnedDeviceId::try_from(device_id)?)
+        } else {
+            let device_id = DeviceId::new();
+            self.client
+                .store()
+                .set_custom_value(b"device_id", device_id.as_bytes().to_vec())
+                .await?;
+            Ok(device_id)
+        }
+    }
+    /// Returns a cached session
+    async fn client_session(self: &Arc<Self>) -> Result<Session> {
+        let session = self.client.store().get_custom_value(b"session").await?;
+        if let Some(session) = session {
+            let session = serde_json::from_slice(&session)?;
+            Ok(session)
+        } else {
+            let login_info = LoginInfo::ApplicationService(ApplicationService::new(
+                UserIdentifier::UserIdOrLocalpart(self.user_id.as_str()),
+            ));
+            let mut request = login::v3::Request::new(login_info);
+            let device_id = self.device_id().await?;
+            request.device_id = Some(device_id.as_ref());
+            request.initial_device_display_name = Some("discordbot");
+            let request = self
+                .appservice
+                .get_cached_client(None)?
+                .send(request, Some(RequestConfig::default().force_auth()))
+                .await?;
+            let session = Session {
+                access_token: request.access_token,
+                user_id: request.user_id,
+                device_id: request.device_id,
+            };
+            let encoded_session = serde_json::to_vec(&session)?;
+            self.client
+                .store()
+                .set_custom_value(b"session", encoded_session)
+                .await?;
+            Ok(session)
+        }
+    }
     /// Retrieve connection options from a config file
     fn get_connect_options(config: &ConfigFile) -> PgConnectOptions {
         let mut conn_opt = PgConnectOptions::new();
@@ -139,12 +198,6 @@ impl App {
         )?;
 
         let client = client_builder.build().await?;
-        let session = Session {
-            access_token: appservice.registration().as_token.clone(),
-            user_id,
-            device_id: discordbot_name.into(),
-        };
-        client.restore_login(session).await?;
 
         let (sender, mut receiver) = mpsc::unbounded_channel();
 
@@ -154,7 +207,12 @@ impl App {
             db,
             queue: sender,
             client,
+            user_id,
         });
+
+        arc.client
+            .restore_login(arc.client_session().await?)
+            .await?;
 
         let arc2 = Arc::clone(&arc);
         tokio::spawn(async move {
@@ -179,12 +237,25 @@ impl App {
         arc.client.register_event_handler_context(Arc::clone(&arc));
 
         // Start registering handlers
-        arc.client.register_event_handler(
-            |event: OriginalSyncRoomMemberEvent, room: Room, Ctx(this): Ctx<Arc<Self>>| async move {
-                this.handle_room_member(room, event).await
-            },
-        ).await;
-
+        arc.client
+            .register_event_handler(
+                |event: StrippedRoomMemberEvent, room: Room, Ctx(this): Ctx<Arc<Self>>| async move {
+                    this.handle_room_member(room, event).await
+                },
+            )
+            .await
+            .register_event_handler(
+                |event: SyncRoomMessageEvent,
+                 room: Room,
+                 Ctx(this): Ctx<Arc<Self>>,
+                 encryption_info: Option<EncryptionInfo>| async move {
+                    println!(
+                        "message {:?} in {:?} with encryption info {:?}",
+                        event, room, encryption_info
+                    );
+                },
+            )
+            .await;
         Ok(arc)
     }
 
@@ -210,21 +281,39 @@ impl App {
     async fn handle_room_member(
         self: &Arc<Self>,
         room: Room,
-        event: OriginalSyncRoomMemberEvent,
+        room_member: StrippedRoomMemberEvent,
     ) -> Result<()> {
-        info!("Handling room member event: {:?}", event);
-        if event.content.membership == MembershipState::Invite {
-            let user_id = UserId::parse(event.state_key.as_str())?;
-            if user_id
-                != self
-                    .client
-                    .user_id()
-                    .await
-                    .ok_or_else(|| anyhow!("No user id"))?
-            {
-                return Ok(());
+        info!(
+            "Handling room member event: {:?} in {:?}",
+            room_member, room
+        );
+        if room_member.state_key != self.user_id {
+            return Ok(());
+        }
+        if let Room::Invited(room) = room {
+            info!("Autojoining room {}", room.room_id());
+            let mut delay = 2;
+
+            while let Err(err) = room.accept_invitation().await {
+                // retry autojoin due to synapse sending invites, before the
+                // invited user can join for more information see
+                // https://github.com/matrix-org/synapse/issues/4345
+                warn!(
+                    "Failed to join room {} ({:?}), retrying in {}s",
+                    room.room_id(),
+                    err,
+                    delay
+                );
+
+                sleep(Duration::from_secs(delay)).await;
+                delay *= 2;
+
+                if delay > 8 {
+                    error!("Can't join room {} ({:?})", room.room_id(), err);
+                    break;
+                }
             }
-            self.client.join_room_by_id(room.room_id()).await?;
+            info!("Successfully joined room {}", room.room_id());
         }
         Ok(())
     }
