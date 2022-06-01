@@ -75,6 +75,7 @@ mod tests {
         str::FromStr,
     };
 
+    use matrix_sdk::ruma::user_id;
     use rand::thread_rng;
     use url::Url;
 
@@ -103,6 +104,7 @@ mod tests {
                 bridge_url: Url::from_str("http://localhost:58913/").expect("valid URL"),
                 prefix: "".to_owned(),
                 db: DBOptions::default(),
+                admin: user_id!("@lotte:chir.rs").to_owned(),
             },
         };
         drop(generate_registration(&config));

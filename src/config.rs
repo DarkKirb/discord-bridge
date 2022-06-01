@@ -9,6 +9,7 @@ use std::{
 
 use anyhow::Result;
 use educe::Educe;
+use matrix_sdk::ruma::OwnedUserId;
 use serde::{Deserialize, Serialize};
 use url::Url;
 
@@ -103,4 +104,6 @@ pub struct Bridge {
     pub prefix: String,
     /// Database options
     pub db: DBOptions,
+    /// Admin username
+    pub admin: OwnedUserId,
 }

@@ -1,9 +1,17 @@
 //! App
 
-use std::{str::FromStr, sync::Arc, time::Duration};
+use std::{
+    str::FromStr,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc, Weak,
+    },
+    time::Duration,
+};
 
 use crate::{Args, ConfigFile};
 use anyhow::Result;
+use dashmap::DashMap;
 use matrix_sdk::{
     config::{RequestConfig, StoreConfig, SyncSettings},
     deserialized_responses::EncryptionInfo,
@@ -20,7 +28,7 @@ use matrix_sdk::{
         events::room::{member::StrippedRoomMemberEvent, message::SyncRoomMessageEvent},
         DeviceId, OwnedDeviceId, OwnedUserId, ServerName, UserId,
     },
-    Client, Session,
+    Client, LoopCtrl, Session,
 };
 use matrix_sdk_appservice::{AppService, AppServiceRegistration};
 use sqlx::{
@@ -32,11 +40,17 @@ use tokio::{
     time::sleep,
 };
 use tracing::{debug, error, info, log::LevelFilter, warn};
+use twilight_model::id::{marker::UserMarker, Id};
+
+pub mod client;
 
 /// Queue events that need to be handled
 #[derive(Clone, Debug)]
 enum QueueEvent {
+    /// Close request sent
     Close,
+    /// Matrix room member event
+    RoomMemberEvent(Box<(StrippedRoomMemberEvent, Room)>),
 }
 
 /// Application entrypoint
@@ -51,7 +65,9 @@ pub struct App {
     /// Event queue
     queue: UnboundedSender<QueueEvent>,
     /// discordbot client
-    client: Client,
+    client: Arc<Client>,
+    /// Client for discord users
+    discord_clients: DashMap<Id<UserMarker>, Arc<Client>>,
     /// discordbot user id
     user_id: OwnedUserId,
 }
@@ -187,10 +203,6 @@ impl App {
 
         // register the discordbot
         let discordbot_name = format!("{}_discordbot", config.bridge.prefix);
-        appservice
-            .register_virtual_user(&discordbot_name)
-            .await
-            .ok();
 
         let user_id = UserId::parse_with_server_name(
             discordbot_name.clone(),
@@ -206,11 +218,15 @@ impl App {
             appservice,
             db,
             queue: sender,
-            client,
+            client: Arc::new(client),
+            discord_clients: DashMap::new(),
             user_id,
         });
 
-        arc.client
+        arc.try_register_user(&discordbot_name).await?;
+
+        arc.client(None)
+            .await?
             .restore_login(arc.client_session().await?)
             .await?;
 
@@ -218,11 +234,9 @@ impl App {
         tokio::spawn(async move {
             while let Some(event) = receiver.recv().await {
                 let arc = Arc::clone(&arc2);
-                match event {
-                    QueueEvent::Close => {
-                        debug!("Closing queue");
-                        receiver.close();
-                    }
+                if let QueueEvent::Close = event {
+                    debug!("Closing queue");
+                    receiver.close();
                 }
                 let err = match tokio::spawn(async move { arc.handle_event(event).await }).await {
                     Ok(Ok(())) => continue,
@@ -232,22 +246,22 @@ impl App {
                 sentry::integrations::anyhow::capture_anyhow(&err);
                 eprintln!("{:?}", err);
             }
+            info!("Shutting down queue runner");
         });
 
-        arc.client.register_event_handler_context(Arc::clone(&arc));
-
-        // Start registering handlers
-        arc.client
+        arc.client(None)
+            .await?
+            .register_event_handler_context(Arc::downgrade(&arc))
             .register_event_handler(
-                |event: StrippedRoomMemberEvent, room: Room, Ctx(this): Ctx<Arc<Self>>| async move {
-                    this.handle_room_member(room, event).await
+                |event: StrippedRoomMemberEvent, room: Room, Ctx(this): Ctx<Weak<Self>>| async move {
+                    this.queue(QueueEvent::RoomMemberEvent(Box::new((event, room))))
                 },
             )
             .await
             .register_event_handler(
                 |event: SyncRoomMessageEvent,
                  room: Room,
-                 Ctx(this): Ctx<Arc<Self>>,
+                 Ctx(this): Ctx<Weak<Self>>,
                  encryption_info: Option<EncryptionInfo>| async move {
                     println!(
                         "message {:?} in {:?} with encryption info {:?}",
@@ -263,6 +277,9 @@ impl App {
     async fn handle_event(self: &Arc<Self>, event: QueueEvent) -> Result<()> {
         match event {
             QueueEvent::Close => {}
+            QueueEvent::RoomMemberEvent(content) => {
+                self.handle_room_member_event(content.1, content.0).await?;
+            }
         }
         Ok(())
     }
@@ -272,13 +289,31 @@ impl App {
     /// # Errors
     /// This function will return an error if starting the application fails
     pub async fn run(self: &Arc<Self>) -> Result<()> {
-        self.client.sync(SyncSettings::default()).await;
+        let quit = Arc::new(AtomicBool::new(false));
+        signal_hook::flag::register(signal_hook::consts::SIGINT, Arc::clone(&quit))?;
+        self.client(None)
+            .await?
+            .sync_with_callback(SyncSettings::default(), |_| {
+                let quit = Arc::clone(&quit);
+                async move {
+                    if quit.load(Ordering::Relaxed) {
+                        LoopCtrl::Break
+                    } else {
+                        LoopCtrl::Continue
+                    }
+                }
+            })
+            .await;
+
+        info!("Shutting down");
+        self.queue.send(QueueEvent::Close)?;
+
         Ok(())
     }
 
-    /// Handle [`OriginalSyncRoomMemberEvent`]
+    /// Handle [`StrippedRoomMemberEvent`]
     #[tracing::instrument]
-    async fn handle_room_member(
+    async fn handle_room_member_event(
         self: &Arc<Self>,
         room: Room,
         room_member: StrippedRoomMemberEvent,
@@ -315,6 +350,23 @@ impl App {
             }
             info!("Successfully joined room {}", room.room_id());
         }
+        Ok(())
+    }
+}
+
+/// Helper trait used for enqueueing events
+trait EnqueueEvent {
+    /// Queue an event
+    fn queue(&self, event: QueueEvent) -> Result<()>;
+}
+
+impl EnqueueEvent for Weak<App> {
+    fn queue(&self, event: QueueEvent) -> Result<()> {
+        self.upgrade()
+            .ok_or_else(|| anyhow::anyhow!("Application is shutting down"))?
+            .queue
+            .send(event)?;
+
         Ok(())
     }
 }
