@@ -190,6 +190,8 @@ impl App {
         debug!("Connecting to database");
         let db = Arc::new(PgPool::connect_with(Self::get_connect_options(config)).await?);
 
+        sqlx::migrate!().set_ignore_missing(true).run(&*db).await?;
+
         debug!("Opening the statestore");
         let statestore = matrix_sdk_sql::StateStore::new(&db).await?;
         let mut statestore2 = matrix_sdk_sql::StateStore::new(&db).await?;

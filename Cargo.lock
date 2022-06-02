@@ -290,9 +290,9 @@ dependencies = [
 
 [[package]]
 name = "bumpalo"
-version = "3.9.1"
+version = "3.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a4a45a46ab1f2412e53d3a0ade76ffad2025804294569aae387231a0cd6e0899"
+checksum = "37ccbd214614c6783386c1af30caf03192f17891059cecc394b4fb119e363de3"
 
 [[package]]
 name = "bytemuck"
@@ -1655,7 +1655,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-sql"
 version = "0.1.0-beta.2"
-source = "git+https://github.com/DarkKirb/matrix-sdk-statestore-sql#e2c558d4639e82ab2cca4e679ba19fa3a89681f6"
+source = "git+https://github.com/DarkKirb/matrix-sdk-statestore-sql#6aa922861600905889976b647e3215ca8c919c8f"
 dependencies = [
  "async-trait",
  "bincode",
