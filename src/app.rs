@@ -363,6 +363,42 @@ impl App {
         }
         Ok(())
     }
+
+    /// Handles a command
+    #[tracing::instrument(skip(self))]
+    async fn handle_command(
+        self: &Arc<Self>,
+        sender: &UserId,
+        args: Vec<&str>,
+        room: Room,
+    ) -> Result<()> {
+        #[allow(clippy::single_match)]
+        match args.get(0) {
+            Some(&"unregister") => {
+                self.unregister_user(sender).await?;
+                let content = RoomMessageEventContent::text_plain(
+                    "Successfully unregistered discord account",
+                );
+                if let Room::Joined(room) = room {
+                    room.send(content, None).await?;
+                }
+            }
+            Some(&"register") => {
+                if args.len() >= 2 {
+                    self.register_user(sender, room.room_id(), args[1]).await?;
+                    let content = RoomMessageEventContent::text_plain(
+                        "Successfully registered discord account",
+                    );
+                    if let Room::Joined(room) = room {
+                        room.send(content, None).await?;
+                    }
+                }
+            }
+            _ => {}
+        }
+        Ok(())
+    }
+
     /// Handle a message
     #[tracing::instrument(skip(self))]
     async fn handle_room_message_event(
@@ -372,24 +408,12 @@ impl App {
     ) -> Result<()> {
         let event = event.into_full_event(room.room_id().to_owned());
         if let MessageLikeEvent::Original(o) = event {
-            if o.content.body().contains("ping") {
-                let client2 = self.client(Some(Id::new(2))).await?;
-                let content = RoomMessageEventContent::text_plain("pong");
-                let txn_id = TransactionId::new();
-                if let Room::Joined(room) = room {
-                    room.invite_user_by_id(
-                        &client2
-                            .user_id()
-                            .await
-                            .ok_or_else(|| anyhow::anyhow!("Missing user id"))?,
-                    )
-                    .await
-                    .ok();
-                    let room2 = client2.join_room_by_id(room.room_id()).await?;
-                    if let Room::Joined(room2) = room2 {
-                        room2.send(content, Some(&txn_id)).await?;
-                    }
-                }
+            if o.content.body().starts_with("!discord") {
+                let content = o.content.body();
+                let mut parts = content.split_whitespace();
+                parts.next();
+                let args = parts.collect::<Vec<_>>();
+                return self.handle_command(&o.sender, args, room).await;
             }
         }
         Ok(())

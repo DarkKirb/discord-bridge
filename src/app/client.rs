@@ -13,10 +13,11 @@ use matrix_sdk::{
             client::{error::ErrorKind, uiaa::UiaaResponse},
             error::{FromHttpResponseError, ServerError},
         },
-        RoomId,
+        RoomId, UserId,
     },
     Client, HttpError,
 };
+use sqlx::query;
 use twilight_model::id::{marker::UserMarker, Id};
 
 /// Wrapped client used by this crate
@@ -131,5 +132,37 @@ impl App {
         room_id: &RoomId,
     ) -> Result<Room> {
         self.client(user_id).await?.join_room_by_id(room_id).await
+    }
+
+    /// Unregisters a matrix user
+    #[allow(clippy::panic)]
+    pub(super) async fn unregister_user(self: &Arc<Self>, user: &UserId) -> Result<()> {
+        query!(
+            "DELETE FROM discord_tokens WHERE user_id = $1",
+            user.as_str()
+        )
+        .execute(&*self.db)
+        .await?;
+        Ok(())
+    }
+
+    /// Registers a matrix user
+    #[allow(clippy::panic)]
+    pub(super) async fn register_user(
+        self: &Arc<Self>,
+        user: &UserId,
+        room: &RoomId,
+        token: &str,
+    ) -> Result<()> {
+        self.unregister_user(user).await?;
+        query!(
+            "INSERT INTO discord_tokens (user_id, token, management_room) VALUES ($1, $2, $3)",
+            user.as_str(),
+            token,
+            room.as_str()
+        )
+        .execute(&*self.db)
+        .await?;
+        Ok(())
     }
 }

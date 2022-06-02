@@ -1,3 +1,15 @@
 {
-  "db": "PostgreSQL"
+  "db": "PostgreSQL",
+  "68ae4209df1901b1260200f417edf7c501c8df481d375247e12843a077731fb9": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      }
+    },
+    "query": "DELETE FROM discord_tokens WHERE user_id = $1"
+  }
 }
