@@ -423,11 +423,11 @@ in
     };
   });
   
-  "registry+https://github.com/rust-lang/crates.io-index".bumpalo."3.9.1" = overridableMkRustCrate (profileName: rec {
+  "registry+https://github.com/rust-lang/crates.io-index".bumpalo."3.10.0" = overridableMkRustCrate (profileName: rec {
     name = "bumpalo";
-    version = "3.9.1";
+    version = "3.10.0";
     registry = "registry+https://github.com/rust-lang/crates.io-index";
-    src = fetchCratesIo { inherit name version; sha256 = "a4a45a46ab1f2412e53d3a0ade76ffad2025804294569aae387231a0cd6e0899"; };
+    src = fetchCratesIo { inherit name version; sha256 = "37ccbd214614c6783386c1af30caf03192f17891059cecc394b4fb119e363de3"; };
     features = builtins.concatLists [
       [ "default" ]
     ];
@@ -2355,7 +2355,7 @@ in
       url = https://github.com/DarkKirb/matrix-sdk-statestore-sql;
       name = "matrix-sdk-sql";
       version = "0.1.0-beta.2";
-      rev = "e2c558d4639e82ab2cca4e679ba19fa3a89681f6";};
+      rev = "6aa922861600905889976b647e3215ca8c919c8f";};
     features = builtins.concatLists [
       [ "bincode" ]
       [ "dashmap" ]
@@ -5164,7 +5164,7 @@ in
       [ "spans" ]
     ];
     dependencies = {
-      bumpalo = rustPackages."registry+https://github.com/rust-lang/crates.io-index".bumpalo."3.9.1" { inherit profileName; };
+      bumpalo = rustPackages."registry+https://github.com/rust-lang/crates.io-index".bumpalo."3.10.0" { inherit profileName; };
       lazy_static = rustPackages."registry+https://github.com/rust-lang/crates.io-index".lazy_static."1.4.0" { inherit profileName; };
       log = rustPackages."registry+https://github.com/rust-lang/crates.io-index".log."0.4.17" { inherit profileName; };
       proc_macro2 = rustPackages."registry+https://github.com/rust-lang/crates.io-index".proc-macro2."1.0.39" { inherit profileName; };
