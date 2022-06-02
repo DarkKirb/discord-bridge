@@ -14,7 +14,6 @@ use anyhow::Result;
 use dashmap::DashMap;
 use matrix_sdk::{
     config::{RequestConfig, StoreConfig, SyncSettings},
-    deserialized_responses::EncryptionInfo,
     event_handler::Ctx,
     room::Room,
     ruma::{
@@ -25,8 +24,14 @@ use matrix_sdk::{
             },
             uiaa::UserIdentifier,
         },
-        events::room::{member::StrippedRoomMemberEvent, message::SyncRoomMessageEvent},
-        DeviceId, OwnedDeviceId, OwnedUserId, ServerName, UserId,
+        events::{
+            room::{
+                member::StrippedRoomMemberEvent,
+                message::{RoomMessageEventContent, SyncRoomMessageEvent},
+            },
+            MessageLikeEvent,
+        },
+        DeviceId, OwnedDeviceId, OwnedUserId, ServerName, TransactionId, UserId,
     },
     Client, LoopCtrl, Session,
 };
@@ -42,7 +47,10 @@ use tokio::{
 use tracing::{debug, error, info, log::LevelFilter, warn};
 use twilight_model::id::{marker::UserMarker, Id};
 
+use self::client::VirtualClient;
+
 pub mod client;
+pub mod messages;
 
 /// Queue events that need to be handled
 #[derive(Clone, Debug)]
@@ -51,6 +59,8 @@ enum QueueEvent {
     Close,
     /// Matrix room member event
     RoomMemberEvent(Box<(StrippedRoomMemberEvent, Room)>),
+    /// Matrix message event
+    RoomMessageEvent(Box<(SyncRoomMessageEvent, Room)>),
 }
 
 /// Application entrypoint
@@ -65,9 +75,9 @@ pub struct App {
     /// Event queue
     queue: UnboundedSender<QueueEvent>,
     /// discordbot client
-    client: Arc<Client>,
+    client: Arc<VirtualClient>,
     /// Client for discord users
-    discord_clients: DashMap<Id<UserMarker>, Arc<Client>>,
+    discord_clients: DashMap<Id<UserMarker>, Arc<VirtualClient>>,
     /// discordbot user id
     user_id: OwnedUserId,
 }
@@ -172,7 +182,7 @@ impl App {
     ///
     /// # Errors
     /// This function will return an error if reading registration information fails
-    #[tracing::instrument]
+    #[tracing::instrument(skip(config, args))]
     pub async fn new(config: &ConfigFile, args: &Args) -> Result<Arc<Self>> {
         debug!("Reading registration data");
         let registration = AppServiceRegistration::try_from_yaml_file(&args.registration)?;
@@ -218,7 +228,7 @@ impl App {
             appservice,
             db,
             queue: sender,
-            client: Arc::new(client),
+            client: Arc::new(VirtualClient::new(client)),
             discord_clients: DashMap::new(),
             user_id,
         });
@@ -261,12 +271,8 @@ impl App {
             .register_event_handler(
                 |event: SyncRoomMessageEvent,
                  room: Room,
-                 Ctx(this): Ctx<Weak<Self>>,
-                 encryption_info: Option<EncryptionInfo>| async move {
-                    println!(
-                        "message {:?} in {:?} with encryption info {:?}",
-                        event, room, encryption_info
-                    );
+                 Ctx(this): Ctx<Weak<Self>>| async move {
+                     this.queue(QueueEvent::RoomMessageEvent(Box::new((event, room))))
                 },
             )
             .await;
@@ -279,6 +285,9 @@ impl App {
             QueueEvent::Close => {}
             QueueEvent::RoomMemberEvent(content) => {
                 self.handle_room_member_event(content.1, content.0).await?;
+            }
+            QueueEvent::RoomMessageEvent(content) => {
+                self.handle_room_message_event(content.0, content.1).await?;
             }
         }
         Ok(())
@@ -312,7 +321,7 @@ impl App {
     }
 
     /// Handle [`StrippedRoomMemberEvent`]
-    #[tracing::instrument]
+    #[tracing::instrument(skip(self))]
     async fn handle_room_member_event(
         self: &Arc<Self>,
         room: Room,
@@ -349,6 +358,37 @@ impl App {
                 }
             }
             info!("Successfully joined room {}", room.room_id());
+        }
+        Ok(())
+    }
+    /// Handle a message
+    #[tracing::instrument(skip(self))]
+    async fn handle_room_message_event(
+        self: &Arc<Self>,
+        event: SyncRoomMessageEvent,
+        room: Room,
+    ) -> Result<()> {
+        let event = event.into_full_event(room.room_id().to_owned());
+        if let MessageLikeEvent::Original(o) = event {
+            if o.content.body().contains("ping") {
+                let client2 = self.client(Some(Id::new(2))).await?;
+                let content = RoomMessageEventContent::text_plain("pong");
+                let txn_id = TransactionId::new();
+                if let Room::Joined(room) = room {
+                    room.invite_user_by_id(
+                        &client2
+                            .user_id()
+                            .await
+                            .ok_or_else(|| anyhow::anyhow!("Missing user id"))?,
+                    )
+                    .await
+                    .ok();
+                    let room2 = client2.join_room_by_id(room.room_id()).await?;
+                    if let Room::Joined(room2) = room2 {
+                        room2.send(content, Some(&txn_id)).await?;
+                    }
+                }
+            }
         }
         Ok(())
     }

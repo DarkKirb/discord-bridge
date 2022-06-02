@@ -26,7 +26,6 @@ clap = { version = "3.1.18", features = ["derive"] }
 dashmap = "5.3.4"
 dotenv = "0.15.0"
 educe = "0.4.19"
-futures = "0.3.21"
 once_cell = "1.12.0"
 rand = "0.8.5"
 serde = { version = "1.0.137", features = ["derive"] }
@@ -55,7 +54,7 @@ default-features = false
 features = ["image-rayon", "e2e-encryption"]
 
 [dependencies.matrix-sdk-sql]
-version = "0.1.0-beta.2"
+git = "https://github.com/DarkKirb/matrix-sdk-statestore-sql"
 default-features = false
 features = ["postgres", "rustls", "e2e-encryption"]
 

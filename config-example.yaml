@@ -1,7 +1,7 @@
 # Homeserver configuration
 homeserver:
   # Address the homeserver is reachable over
-  address: https://matrix.chir.rs
+  address: https://matrix.int.chir.rs
   # Domain name of the homeserver
   domain: chir.rs
   # Supported unstable MSCs

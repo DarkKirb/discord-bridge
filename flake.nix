@@ -44,6 +44,8 @@
           cargo-audit
           sqlx-cli
           github-cli
+          mold
+          clang
         ];
       };
       packages = rec {
