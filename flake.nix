@@ -56,5 +56,6 @@
         inherit inputs system;
       };
       hydraJobs = packages;
+      formatter = pkgs.nixfmt;
     });
 }
