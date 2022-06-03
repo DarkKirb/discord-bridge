@@ -202,7 +202,7 @@ jobs:
       - run: |
           echo ${{ secrets.NIX_CACHE_KEY }} > ~/key.pem
           mkdir ~/.aws
-          echo ${{ secrets.AWS_CREDENTIALS }} > ~/.aws/credentials
+          echo "${{ secrets.AWS_CREDENTIALS }}" > ~/.aws/credentials
       - run: nix copy --to s3://cache-chir-rs?scheme=https&endpoint=s3.us-west-000.backblazeb2.com&secret-key=$HOME/key.pem&multipart-upload=true&compression=zstd&compression-level=15 --all
   update_contributors:
     runs-on: ubuntu-latest
