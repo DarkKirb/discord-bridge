@@ -11,5 +11,19 @@
       }
     },
     "query": "DELETE FROM discord_tokens WHERE user_id = $1"
+  },
+  "b4be232680592802492263975b8544dbd877d518978df672a9f47b77cacb276a": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text",
+          "Text"
+        ]
+      }
+    },
+    "query": "INSERT INTO discord_tokens (user_id, token, management_room) VALUES ($1, $2, $3)"
   }
 }
