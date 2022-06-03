@@ -1,8 +1,6 @@
 name: Automatically update Cargo.nix
 on:
-  push:
-    branches:
-      - main
+  pull_request:
     paths:
       - "**/Cargo.toml"
       - "**/Cargo.lock"
@@ -20,8 +18,7 @@ jobs:
             trusted-public-keys = nixcache:8KKuGz95Pk4UJ5W/Ni+pN+v+LDTkMMFV4yrGmAYgkDg= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
             substituters = https://f000.backblazeb2.com/file/cache-chir-rs/ https://cache.nixos.org/
       - run: echo yes | nix run github:cargo2nix/cargo2nix -- -f
-      - run: git add Cargo.nix
-      - run: git config user.email autoupdate@chir.rs
-      - run: git config user.name "Autoupdater"
-      - run: git commit -am "Automatic Cargo.nix update" || true
-      - run: git push
+      - uses: getsentry/action-git-diff-suggestions@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          message: cargo2nix made the following change
