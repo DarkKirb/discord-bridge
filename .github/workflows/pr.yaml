@@ -1,0 +1,22 @@
+name: Automatic suggestions
+on: pull_request
+
+jobs:
+  rustfmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+          override: true
+          components: rustfmt
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all
+      - uses: getsentry/action-git-diff-suggestions@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          message: rustfmt made the following change
