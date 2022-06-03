@@ -187,18 +187,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: (github.ref == 'refs/heads/master') && success()
-  build_nix:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: cachix/install-nix-action@v17
-        with:
-          extra_nix_config: |
-            trusted-public-keys = nixcache:8KKuGz95Pk4UJ5W/Ni+pN+v+LDTkMMFV4yrGmAYgkDg= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
-            substituters = https://f000.backblazeb2.com/file/cache-chir-rs/ https://cache.nixos.org/
-      - run: nix build
   update_contributors:
     runs-on: ubuntu-latest
     steps:
