@@ -29,7 +29,7 @@ jobs:
           extra_nix_config: |
             trusted-public-keys = nixcache:8KKuGz95Pk4UJ5W/Ni+pN+v+LDTkMMFV4yrGmAYgkDg= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
             substituters = https://f000.backblazeb2.com/file/cache-chir-rs/ https://cache.nixos.org/
-      - run: nix fmt
+      - run: nix fmt flake.nix
       - uses: getsentry/action-git-diff-suggestions@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
