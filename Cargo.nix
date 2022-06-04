@@ -2186,7 +2186,7 @@ in
       url = https://github.com/matrix-org/matrix-rust-sdk;
       name = "matrix-sdk-appservice";
       version = "0.1.0";
-      rev = "3cf4150df28e594741af61bddad8e502c04fa79c";};
+      rev = "0f758a643c230a137b29b9cbe49ec632fc3b4a60";};
     features = builtins.concatLists [
       [ "e2e-encryption" ]
       [ "eyre" ]
@@ -2204,6 +2204,7 @@ in
       serde_json = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_json."1.0.81" { inherit profileName; };
       serde_yaml = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_yaml."0.8.24" { inherit profileName; };
       thiserror = rustPackages."registry+https://github.com/rust-lang/crates.io-index".thiserror."1.0.31" { inherit profileName; };
+      tokio = rustPackages."registry+https://github.com/rust-lang/crates.io-index".tokio."1.18.2" { inherit profileName; };
       tracing = rustPackages."registry+https://github.com/rust-lang/crates.io-index".tracing."0.1.34" { inherit profileName; };
       url = rustPackages."registry+https://github.com/rust-lang/crates.io-index".url."2.2.2" { inherit profileName; };
       warp = rustPackages."registry+https://github.com/rust-lang/crates.io-index".warp."0.3.2" { inherit profileName; };
