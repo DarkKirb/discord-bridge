@@ -49,7 +49,7 @@ default-features = false
 features = ["eyre", "markdown", "rustls-tls", "e2e-encryption"]
 
 [dependencies.matrix-sdk]
-version = "0.5.0"
+git = "https://github.com/matrix-org/matrix-rust-sdk"
 default-features = false
 features = ["image-rayon", "e2e-encryption"]
 
@@ -78,5 +78,10 @@ features = [
 anyhow = "1.0.57"
 vergen = "7.2.0"
 
-[patch."https://github.com/matrix-org/matrix-rust-sdk"]
-matrix-sdk = "0.5.0"
+[patch.crates-io]
+matrix-sdk = { git = "https://github.com/matrix-org/matrix-rust-sdk" }
+matrix-sdk-base = { git = "https://github.com/matrix-org/matrix-rust-sdk" }
+matrix-sdk-common = { git = "https://github.com/matrix-org/matrix-rust-sdk" }
+matrix-sdk-crypto = { git = "https://github.com/matrix-org/matrix-rust-sdk" }
+matrix-sdk-store-encryption = { git = "https://github.com/matrix-org/matrix-rust-sdk" }
+vodozemac = { git = "https://github.com/matrix-org/vodozemac", rev = "d0e744287a14319c2a9148fef3747548c740fc36" }
