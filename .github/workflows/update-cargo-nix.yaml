@@ -1,6 +1,6 @@
 name: Automatically update Cargo.nix
 on:
-  pull_request:
+  pull_request_target:
     paths:
       - "**/Cargo.toml"
       - "**/Cargo.lock"
