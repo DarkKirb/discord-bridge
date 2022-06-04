@@ -1520,7 +1520,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-appservice"
 version = "0.1.0"
-source = "git+https://github.com/matrix-org/matrix-rust-sdk#3cf4150df28e594741af61bddad8e502c04fa79c"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#0f758a643c230a137b29b9cbe49ec632fc3b4a60"
 dependencies = [
  "dashmap",
  "http",
@@ -1532,6 +1532,7 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "thiserror",
+ "tokio",
  "tracing",
  "url",
  "warp",
