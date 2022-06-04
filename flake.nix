@@ -20,7 +20,7 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, rust-overlay, cargo2nix, ... }@inputs:
-    flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
+    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
       let
         overlays = [ cargo2nix.overlay (import rust-overlay) ];
         pkgs = import nixpkgs { inherit system overlays; };
