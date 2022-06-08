@@ -31,7 +31,7 @@ use matrix_sdk::{
             },
             MessageLikeEvent,
         },
-        DeviceId, OwnedDeviceId, OwnedUserId, ServerName, TransactionId, UserId,
+        DeviceId, OwnedDeviceId, OwnedUserId, ServerName, UserId,
     },
     Client, LoopCtrl, Session,
 };
