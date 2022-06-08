@@ -373,7 +373,7 @@ impl App {
         room: Room,
     ) -> Result<()> {
         #[allow(clippy::single_match)]
-        match args.get(0) {
+        match args.first() {
             Some(&"unregister") => {
                 self.unregister_user(sender).await?;
                 let content = RoomMessageEventContent::text_plain(
