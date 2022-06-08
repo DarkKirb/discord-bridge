@@ -24,6 +24,30 @@ jobs:
         with:
           default_author: github_actions
           message: Format rust code
+  clippy-fix:
+    runs-on: ubuntu-latest
+    env:
+      CLIPPY_FLAGS: -Wfuture-incompatible -Wdeprecated-in-future -Welided-lifetimes-in-paths -Wexplicit-outlives-requirements -Wkeyword-idents -Wmacro-use-extern-crate -Wmeta-variable-misuse -Wmissing-abi -Wmissing-copy-implementations -Wmissing-debug-implementations -Wmissing-docs -Wnoop-method-call -Wpointer-structural-match -Wsingle-use-lifetimes -Wtrivial-casts -Wtrivial-numeric-casts -Wunreachable-pub -Wunsafe-op-in-unsafe-fn -Wunused-crate-dependencies -Wunused-extern-crates -Wunused-import-braces -Wunused-lifetimes -Wunused-qualifications -Wvariant-size-differences -Wclippy::all -Wclippy::nursery -Wclippy::pedantic -Wclippy::cargo -Wclippy::clone_on_ref_ptr -Wclippy::default_union_representation -Wclippy::expect_used -Wclippy::get_unwrap -Wclippy::if_then_some_else_none -Wclippy::lossy_float_literal -Wclippy::map_err_ignore -Wclippy::missing_docs_in_private_items -Wclippy::panic -Wclippy::panic_in_result_fn -Wclippy::rc_buffer -Wclippy::rc_mutex -Wclippy::str_to_string -Wclippy::try_err -Wclippy::undocumented_unsafe_blocks -Wclippy::unwrap_used -Aclippy::type-repetition-in-bounds -Aclippy::trait-duplication-in-bounds
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GH_TOKEN }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+          override: true
+          components: clippy
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --fix -- ${{ env.CLIPPY_FLAGS }}
+      - uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: Format rust code
   nixfmt:
     runs-on: ubuntu-latest
     steps:
