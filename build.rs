@@ -1,5 +1,3 @@
-
-
 fn main() -> anyhow::Result<()> {
     /*let mut config = vergen::Config::default();
     if env::var("NIX_CC").is_ok() {
