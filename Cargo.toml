@@ -74,10 +74,6 @@ features = [
   "rustls",
 ]
 
-[build-dependencies]
-anyhow = "1.0.57"
-vergen = "7.2.0"
-
 [patch.crates-io]
 matrix-sdk = { git = "https://github.com/matrix-org/matrix-rust-sdk" }
 matrix-sdk-base = { git = "https://github.com/matrix-org/matrix-rust-sdk" }

@@ -43,13 +43,6 @@ pub enum Command {
 
 /// Sets up sentry
 fn setup_sentry() -> Result<ClientInitGuard> {
-    /// The release name
-    static RELEASE_NAME: Lazy<Option<String>> = Lazy::new(|| {
-        option_env!("CARGO_PKG_NAME").and_then(|name| {
-            option_env!("VERGEN_GIT_SHA").map(|version| format!("{}@{}", name, version))
-        })
-    });
-
     tracing_subscriber::Registry::default()
         .with(tracing_subscriber::fmt::layer().with_filter(EnvFilter::from_default_env()))
         .with(sentry::integrations::tracing::layer())
@@ -57,7 +50,7 @@ fn setup_sentry() -> Result<ClientInitGuard> {
 
     let client_options = sentry::ClientOptions {
         dsn: std::env::var("SENTRY_DSN").ok().into_dsn()?,
-        release: RELEASE_NAME.as_ref().map(|s| Cow::Borrowed(s.as_str())),
+        release: sentry::release_name!(),
         attach_stacktrace: true,
         default_integrations: true,
         ..Default::default()
