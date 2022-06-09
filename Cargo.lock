@@ -1484,7 +1484,7 @@ checksum = "a3e378b66a060d48947b590737b30a1be76706c8dd7b8ba0f2fe3989c68a853f"
 [[package]]
 name = "matrix-sdk"
 version = "0.5.0"
-source = "git+https://github.com/matrix-org/matrix-rust-sdk#7f49618d350fab66b7e1dc4eaf64ec25ceafd658"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#5c4f2b3430b51073fb91bcb1ba66d4ac902c100a"
 dependencies = [
  "anymap2",
  "async-once-cell",
@@ -1519,7 +1519,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-appservice"
 version = "0.1.0"
-source = "git+https://github.com/matrix-org/matrix-rust-sdk#7f49618d350fab66b7e1dc4eaf64ec25ceafd658"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#5c4f2b3430b51073fb91bcb1ba66d4ac902c100a"
 dependencies = [
  "dashmap",
  "http",
@@ -1540,7 +1540,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-base"
 version = "0.5.1"
-source = "git+https://github.com/matrix-org/matrix-rust-sdk#7f49618d350fab66b7e1dc4eaf64ec25ceafd658"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#5c4f2b3430b51073fb91bcb1ba66d4ac902c100a"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -1563,7 +1563,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-common"
 version = "0.5.0"
-source = "git+https://github.com/matrix-org/matrix-rust-sdk#7f49618d350fab66b7e1dc4eaf64ec25ceafd658"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#5c4f2b3430b51073fb91bcb1ba66d4ac902c100a"
 dependencies = [
  "async-lock",
  "futures-util",
@@ -1577,7 +1577,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-crypto"
 version = "0.5.0"
-source = "git+https://github.com/matrix-org/matrix-rust-sdk#7f49618d350fab66b7e1dc4eaf64ec25ceafd658"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#5c4f2b3430b51073fb91bcb1ba66d4ac902c100a"
 dependencies = [
  "aes",
  "async-trait",
@@ -1604,7 +1604,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-indexeddb"
 version = "0.1.0"
-source = "git+https://github.com/matrix-org/matrix-rust-sdk#7f49618d350fab66b7e1dc4eaf64ec25ceafd658"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#5c4f2b3430b51073fb91bcb1ba66d4ac902c100a"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1628,7 +1628,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-sled"
 version = "0.1.0"
-source = "git+https://github.com/matrix-org/matrix-rust-sdk#7f49618d350fab66b7e1dc4eaf64ec25ceafd658"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#5c4f2b3430b51073fb91bcb1ba66d4ac902c100a"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -1673,7 +1673,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-store-encryption"
 version = "0.1.0"
-source = "git+https://github.com/matrix-org/matrix-rust-sdk#7f49618d350fab66b7e1dc4eaf64ec25ceafd658"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#5c4f2b3430b51073fb91bcb1ba66d4ac902c100a"
 dependencies = [
  "blake3",
  "chacha20poly1305",
