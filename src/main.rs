@@ -1,6 +1,6 @@
 //! Discord-Matrix bridge
 
-use std::{borrow::Cow, path::PathBuf};
+use std::{path::PathBuf};
 
 use anyhow::Result;
 use app::App;
@@ -9,7 +9,7 @@ use clap::{Parser, Subcommand};
 pub mod config;
 pub use config::File as ConfigFile;
 
-use once_cell::sync::Lazy;
+
 use sentry::{ClientInitGuard, IntoDsn};
 use tracing_subscriber::{
     prelude::__tracing_subscriber_SubscriberExt, util::SubscriberInitExt, EnvFilter, Layer,
