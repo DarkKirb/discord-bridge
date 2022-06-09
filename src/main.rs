@@ -1,6 +1,6 @@
 //! Discord-Matrix bridge
 
-use std::{path::PathBuf};
+use std::path::PathBuf;
 
 use anyhow::Result;
 use app::App;
@@ -8,7 +8,6 @@ use clap::{Parser, Subcommand};
 
 pub mod config;
 pub use config::File as ConfigFile;
-
 
 use sentry::{ClientInitGuard, IntoDsn};
 use tracing_subscriber::{
