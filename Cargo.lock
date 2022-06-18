@@ -1565,7 +1565,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-sql"
 version = "0.1.0-beta.2"
-source = "git+https://github.com/DarkKirb/matrix-sdk-statestore-sql#3af6662ef1e243fe6c24e6e30730f8ec1d4822a0"
+source = "git+https://github.com/DarkKirb/matrix-sdk-statestore-sql#20a909dd84e1c774e1a27f3a27b917bbc648cd7d"
 dependencies = [
  "async-trait",
  "bincode",
