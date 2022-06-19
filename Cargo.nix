@@ -24,7 +24,7 @@ args @ {
     if args.workspaceSrc == null
     then ./.
     else args.workspaceSrc;
-in let
+
   inherit (rustLib) fetchCratesIo fetchCrateLocal fetchCrateGit fetchCrateAlternativeRegistry expandFeatures decideProfile genDrvsByProfile;
   profilesByName = {
     dev = builtins.fromTOML "[package.backtrace]\nopt-level = 3\n";
@@ -2622,7 +2622,7 @@ in {
     version = "0.5.0";
     registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/matrix-org/matrix-rust-sdk;
+      url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk";
       version = "0.5.0";
       rev = "4971802e7506dd56f78be6d24e373282133b31cd";
@@ -2648,7 +2648,7 @@ in {
       async_stream = rustPackages."registry+https://github.com/rust-lang/crates.io-index".async-stream."0.3.3" {inherit profileName;};
       async_trait = buildRustPackages."registry+https://github.com/rust-lang/crates.io-index".async-trait."0.1.56" {profileName = "__noProfile";};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "backoff"
         else null
       } =
@@ -2672,7 +2672,7 @@ in {
       serde_json = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_json."1.0.81" {inherit profileName;};
       thiserror = rustPackages."registry+https://github.com/rust-lang/crates.io-index".thiserror."1.0.31" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "tokio"
         else null
       } =
@@ -2694,7 +2694,7 @@ in {
     version = "0.1.0";
     registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/matrix-org/matrix-rust-sdk;
+      url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-appservice";
       version = "0.1.0";
       rev = "4971802e7506dd56f78be6d24e373282133b31cd";
@@ -2728,7 +2728,7 @@ in {
     version = "0.5.1";
     registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/matrix-org/matrix-rust-sdk;
+      url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-base";
       version = "0.5.1";
       rev = "4971802e7506dd56f78be6d24e373282133b31cd";
@@ -2750,7 +2750,7 @@ in {
       matrix_sdk_crypto = rustPackages."git+https://github.com/matrix-org/matrix-rust-sdk".matrix-sdk-crypto."0.5.0" {inherit profileName;};
       once_cell = rustPackages."registry+https://github.com/rust-lang/crates.io-index".once_cell."1.12.0" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32") || hostPlatform.parsed.cpu.name == "wasm32"
+        if hostPlatform.parsed.cpu.name != "wasm32" || hostPlatform.parsed.cpu.name == "wasm32"
         then "ruma"
         else null
       } =
@@ -2768,7 +2768,7 @@ in {
     version = "0.5.0";
     registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/matrix-org/matrix-rust-sdk;
+      url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-common";
       version = "0.5.0";
       rev = "4971802e7506dd56f78be6d24e373282133b31cd";
@@ -2787,7 +2787,7 @@ in {
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".futures-util."0.3.21" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32") || hostPlatform.parsed.cpu.name == "wasm32"
+        if hostPlatform.parsed.cpu.name != "wasm32" || hostPlatform.parsed.cpu.name == "wasm32"
         then "instant"
         else null
       } =
@@ -2795,7 +2795,7 @@ in {
       ruma = rustPackages."registry+https://github.com/rust-lang/crates.io-index".ruma."0.6.4" {inherit profileName;};
       serde = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde."1.0.137" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "tokio"
         else null
       } =
@@ -2814,7 +2814,7 @@ in {
     version = "0.5.0";
     registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/matrix-org/matrix-rust-sdk;
+      url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-crypto";
       version = "0.5.0";
       rev = "4971802e7506dd56f78be6d24e373282133b31cd";
@@ -2837,7 +2837,7 @@ in {
       pbkdf2 = rustPackages."registry+https://github.com/rust-lang/crates.io-index".pbkdf2."0.11.0" {inherit profileName;};
       rand = rustPackages."registry+https://github.com/rust-lang/crates.io-index".rand."0.8.5" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32") || hostPlatform.parsed.cpu.name == "wasm32"
+        if hostPlatform.parsed.cpu.name != "wasm32" || hostPlatform.parsed.cpu.name == "wasm32"
         then "ruma"
         else null
       } =
@@ -2847,14 +2847,14 @@ in {
       sha2 = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sha2."0.10.2" {inherit profileName;};
       thiserror = rustPackages."registry+https://github.com/rust-lang/crates.io-index".thiserror."1.0.31" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "tokio"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".tokio."1.19.2" {inherit profileName;};
       tracing = rustPackages."registry+https://github.com/rust-lang/crates.io-index".tracing."0.1.35" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32") || hostPlatform.parsed.cpu.name == "wasm32"
+        if hostPlatform.parsed.cpu.name != "wasm32" || hostPlatform.parsed.cpu.name == "wasm32"
         then "vodozemac"
         else null
       } =
@@ -2868,7 +2868,7 @@ in {
     version = "0.1.0";
     registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/matrix-org/matrix-rust-sdk;
+      url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-indexeddb";
       version = "0.1.0";
       rev = "4971802e7506dd56f78be6d24e373282133b31cd";
@@ -2908,7 +2908,7 @@ in {
     version = "0.1.0";
     registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/matrix-org/matrix-rust-sdk;
+      url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-sled";
       version = "0.1.0";
       rev = "4971802e7506dd56f78be6d24e373282133b31cd";
@@ -2943,7 +2943,7 @@ in {
     version = "0.1.0-beta.2";
     registry = "git+https://github.com/DarkKirb/matrix-sdk-statestore-sql";
     src = fetchCrateGit {
-      url = https://github.com/DarkKirb/matrix-sdk-statestore-sql;
+      url = "https://github.com/DarkKirb/matrix-sdk-statestore-sql";
       name = "matrix-sdk-sql";
       version = "0.1.0-beta.2";
       rev = "d939e572966efbe60c82df74742f2e2d515d993f";
@@ -2986,7 +2986,7 @@ in {
     version = "0.1.0";
     registry = "git+https://github.com/matrix-org/matrix-rust-sdk";
     src = fetchCrateGit {
-      url = https://github.com/matrix-org/matrix-rust-sdk;
+      url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-store-encryption";
       version = "0.1.0";
       rev = "4971802e7506dd56f78be6d24e373282133b31cd";
@@ -3850,7 +3850,7 @@ in {
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".libc."0.2.126" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.kernel.name == "emscripten")
+        if hostPlatform.parsed.kernel.name != "emscripten"
         then "rand_chacha"
         else null
       } =
@@ -4138,50 +4138,50 @@ in {
       base64 = rustPackages."registry+https://github.com/rust-lang/crates.io-index".base64."0.13.0" {inherit profileName;};
       bytes = rustPackages."registry+https://github.com/rust-lang/crates.io-index".bytes."1.1.0" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "encoding_rs"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".encoding_rs."0.8.31" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "futures_core"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".futures-core."0.3.21" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "futures_util"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".futures-util."0.3.21" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "h2"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".h2."0.3.13" {inherit profileName;};
       http = rustPackages."registry+https://github.com/rust-lang/crates.io-index".http."0.2.8" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "http_body"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".http-body."0.4.5" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "hyper"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".hyper."0.14.19" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "hyper_rustls"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".hyper-rustls."0.23.0" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "ipnet"
         else null
       } =
@@ -4193,43 +4193,43 @@ in {
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".js-sys."0.3.58" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "lazy_static"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".lazy_static."1.4.0" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "log"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".log."0.4.17" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "mime"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".mime."0.3.16" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "percent_encoding"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".percent-encoding."2.1.0" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "pin_project_lite"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".pin-project-lite."0.2.9" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "rustls"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".rustls."0.20.6" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "rustls_pemfile"
         else null
       } =
@@ -4238,13 +4238,13 @@ in {
       serde_json = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_json."1.0.81" {inherit profileName;};
       serde_urlencoded = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_urlencoded."0.7.1" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "tokio"
         else null
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".tokio."1.19.2" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "tokio_rustls"
         else null
       } =
@@ -4270,7 +4270,7 @@ in {
       } =
         rustPackages."registry+https://github.com/rust-lang/crates.io-index".web-sys."0.3.58" {inherit profileName;};
       ${
-        if !(hostPlatform.parsed.cpu.name == "wasm32")
+        if hostPlatform.parsed.cpu.name != "wasm32"
         then "webpki_roots"
         else null
       } =
@@ -6050,7 +6050,7 @@ in {
     version = "0.10.2";
     registry = "git+https://github.com/terminal-discord/twilight";
     src = fetchCrateGit {
-      url = https://github.com/terminal-discord/twilight;
+      url = "https://github.com/terminal-discord/twilight";
       name = "twilight-model";
       version = "0.10.2";
       rev = "58524c9a1062a4f9efd2b5b14f8773a427077942";
@@ -6297,7 +6297,7 @@ in {
     version = "0.2.0";
     registry = "git+https://github.com/matrix-org/vodozemac";
     src = fetchCrateGit {
-      url = https://github.com/matrix-org/vodozemac;
+      url = "https://github.com/matrix-org/vodozemac";
       name = "vodozemac";
       version = "0.2.0";
       rev = "d0e744287a14319c2a9148fef3747548c740fc36";
