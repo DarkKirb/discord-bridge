@@ -197,8 +197,8 @@ impl App {
         let mut statestore2 = matrix_sdk_sql::StateStore::new(&db).await?;
         statestore2.unlock().await?;
         let store_config = StoreConfig::new()
-            .state_store(Box::new(statestore))
-            .crypto_store(Box::new(statestore2));
+            .state_store(statestore)
+            .crypto_store(statestore2);
         let client_builder = Client::builder()
             .homeserver_url(&config.homeserver.address)
             .store_config(store_config)
