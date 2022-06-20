@@ -2946,7 +2946,7 @@ in {
       url = "https://github.com/DarkKirb/matrix-sdk-statestore-sql";
       name = "matrix-sdk-sql";
       version = "0.1.0-beta.2";
-      rev = "d939e572966efbe60c82df74742f2e2d515d993f";
+      rev = "c4a42cb3f03625ef85982801fc998537d9f86b6b";
     };
     features = builtins.concatLists [
       ["bincode"]
