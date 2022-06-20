@@ -1242,7 +1242,7 @@ in {
       matrix_sdk_sql = rustPackages."git+https://github.com/DarkKirb/matrix-sdk-statestore-sql".matrix-sdk-sql."0.1.0-beta.2" {inherit profileName;};
       once_cell = rustPackages."registry+https://github.com/rust-lang/crates.io-index".once_cell."1.12.0" {inherit profileName;};
       rand = rustPackages."registry+https://github.com/rust-lang/crates.io-index".rand."0.8.5" {inherit profileName;};
-      sentry = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry."0.26.0" {inherit profileName;};
+      sentry = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry."0.27.0" {inherit profileName;};
       serde = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde."1.0.137" {inherit profileName;};
       serde_json = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_json."1.0.81" {inherit profileName;};
       serde_yaml = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_yaml."0.8.24" {inherit profileName;};
@@ -4714,13 +4714,13 @@ in {
     ];
   });
 
-  "registry+https://github.com/rust-lang/crates.io-index".sentry."0.26.0" = overridableMkRustCrate (profileName: rec {
+  "registry+https://github.com/rust-lang/crates.io-index".sentry."0.27.0" = overridableMkRustCrate (profileName: rec {
     name = "sentry";
-    version = "0.26.0";
+    version = "0.27.0";
     registry = "registry+https://github.com/rust-lang/crates.io-index";
     src = fetchCratesIo {
       inherit name version;
-      sha256 = "904eca4fb30c6112a1dae60c0a9e29cfb42f42129da4260f1ee20e94151b62e3";
+      sha256 = "73642819e7fa63eb264abc818a2f65ac8764afbe4870b5ee25bcecc491be0d4c";
     };
     features = builtins.concatLists [
       ["anyhow"]
@@ -4747,25 +4747,25 @@ in {
     dependencies = {
       httpdate = rustPackages."registry+https://github.com/rust-lang/crates.io-index".httpdate."1.0.2" {inherit profileName;};
       reqwest_ = rustPackages."registry+https://github.com/rust-lang/crates.io-index".reqwest."0.11.11" {inherit profileName;};
-      sentry_anyhow = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-anyhow."0.26.0" {inherit profileName;};
-      sentry_backtrace = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-backtrace."0.26.0" {inherit profileName;};
-      sentry_contexts = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-contexts."0.26.0" {inherit profileName;};
-      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.26.0" {inherit profileName;};
-      sentry_debug_images = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-debug-images."0.26.0" {inherit profileName;};
-      sentry_log = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-log."0.26.0" {inherit profileName;};
-      sentry_panic = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-panic."0.26.0" {inherit profileName;};
-      sentry_tracing = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-tracing."0.26.0" {inherit profileName;};
+      sentry_anyhow = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-anyhow."0.27.0" {inherit profileName;};
+      sentry_backtrace = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-backtrace."0.27.0" {inherit profileName;};
+      sentry_contexts = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-contexts."0.27.0" {inherit profileName;};
+      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.27.0" {inherit profileName;};
+      sentry_debug_images = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-debug-images."0.27.0" {inherit profileName;};
+      sentry_log = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-log."0.27.0" {inherit profileName;};
+      sentry_panic = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-panic."0.27.0" {inherit profileName;};
+      sentry_tracing = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-tracing."0.27.0" {inherit profileName;};
       tokio = rustPackages."registry+https://github.com/rust-lang/crates.io-index".tokio."1.19.2" {inherit profileName;};
     };
   });
 
-  "registry+https://github.com/rust-lang/crates.io-index".sentry-anyhow."0.26.0" = overridableMkRustCrate (profileName: rec {
+  "registry+https://github.com/rust-lang/crates.io-index".sentry-anyhow."0.27.0" = overridableMkRustCrate (profileName: rec {
     name = "sentry-anyhow";
-    version = "0.26.0";
+    version = "0.27.0";
     registry = "registry+https://github.com/rust-lang/crates.io-index";
     src = fetchCratesIo {
       inherit name version;
-      sha256 = "40ec14f6bedc88480805096ee145afcc1e517a28db3f58f51b93e2899d932f56";
+      sha256 = "08d3479158a7396b4dfd346a1944d523427a225ff3c39102e8e985bc21cdfea8";
     };
     features = builtins.concatLists [
       ["backtrace"]
@@ -4773,39 +4773,39 @@ in {
     ];
     dependencies = {
       anyhow = rustPackages."registry+https://github.com/rust-lang/crates.io-index".anyhow."1.0.58" {inherit profileName;};
-      sentry_backtrace = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-backtrace."0.26.0" {inherit profileName;};
-      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.26.0" {inherit profileName;};
+      sentry_backtrace = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-backtrace."0.27.0" {inherit profileName;};
+      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.27.0" {inherit profileName;};
     };
   });
 
-  "registry+https://github.com/rust-lang/crates.io-index".sentry-backtrace."0.26.0" = overridableMkRustCrate (profileName: rec {
+  "registry+https://github.com/rust-lang/crates.io-index".sentry-backtrace."0.27.0" = overridableMkRustCrate (profileName: rec {
     name = "sentry-backtrace";
-    version = "0.26.0";
+    version = "0.27.0";
     registry = "registry+https://github.com/rust-lang/crates.io-index";
     src = fetchCratesIo {
       inherit name version;
-      sha256 = "1671189d1b759879fa4bdde46c50a499abb14332ed81f84fc6f60658f41b2fdb";
+      sha256 = "49bafa55eefc6dbc04c7dac91e8c8ab9e89e9414f3193c105cabd991bbc75134";
     };
     dependencies = {
       backtrace = rustPackages."registry+https://github.com/rust-lang/crates.io-index".backtrace."0.3.65" {inherit profileName;};
-      lazy_static = rustPackages."registry+https://github.com/rust-lang/crates.io-index".lazy_static."1.4.0" {inherit profileName;};
+      once_cell = rustPackages."registry+https://github.com/rust-lang/crates.io-index".once_cell."1.12.0" {inherit profileName;};
       regex = rustPackages."registry+https://github.com/rust-lang/crates.io-index".regex."1.5.6" {inherit profileName;};
-      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.26.0" {inherit profileName;};
+      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.27.0" {inherit profileName;};
     };
   });
 
-  "registry+https://github.com/rust-lang/crates.io-index".sentry-contexts."0.26.0" = overridableMkRustCrate (profileName: rec {
+  "registry+https://github.com/rust-lang/crates.io-index".sentry-contexts."0.27.0" = overridableMkRustCrate (profileName: rec {
     name = "sentry-contexts";
-    version = "0.26.0";
+    version = "0.27.0";
     registry = "registry+https://github.com/rust-lang/crates.io-index";
     src = fetchCratesIo {
       inherit name version;
-      sha256 = "db80ceff16bb1a4b2689b8758e5e61e405fc4d8ff9f2d1b5b845b76ce37fa34e";
+      sha256 = "c63317c4051889e73f0b00ce4024cae3e6a225f2e18a27d2c1522eb9ce2743da";
     };
     dependencies = {
       hostname = rustPackages."registry+https://github.com/rust-lang/crates.io-index".hostname."0.3.1" {inherit profileName;};
       libc = rustPackages."registry+https://github.com/rust-lang/crates.io-index".libc."0.2.126" {inherit profileName;};
-      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.26.0" {inherit profileName;};
+      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.27.0" {inherit profileName;};
       ${
         if !hostPlatform.isWindows
         then "uname"
@@ -4818,13 +4818,13 @@ in {
     };
   });
 
-  "registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.26.0" = overridableMkRustCrate (profileName: rec {
+  "registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.27.0" = overridableMkRustCrate (profileName: rec {
     name = "sentry-core";
-    version = "0.26.0";
+    version = "0.27.0";
     registry = "registry+https://github.com/rust-lang/crates.io-index";
     src = fetchCratesIo {
       inherit name version;
-      sha256 = "6c9f509d3959ed4dbbd80ca42572caad682aaa1cdd92c719e0815d0e87f82c96";
+      sha256 = "5a4591a2d128af73b1b819ab95f143bc6a2fbe48cd23a4c45e1ee32177e66ae6";
     };
     features = builtins.concatLists [
       ["client"]
@@ -4833,79 +4833,79 @@ in {
       ["test"]
     ];
     dependencies = {
-      lazy_static = rustPackages."registry+https://github.com/rust-lang/crates.io-index".lazy_static."1.4.0" {inherit profileName;};
+      once_cell = rustPackages."registry+https://github.com/rust-lang/crates.io-index".once_cell."1.12.0" {inherit profileName;};
       rand = rustPackages."registry+https://github.com/rust-lang/crates.io-index".rand."0.8.5" {inherit profileName;};
-      sentry_types = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-types."0.26.0" {inherit profileName;};
+      sentry_types = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-types."0.27.0" {inherit profileName;};
       serde = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde."1.0.137" {inherit profileName;};
       serde_json = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_json."1.0.81" {inherit profileName;};
     };
   });
 
-  "registry+https://github.com/rust-lang/crates.io-index".sentry-debug-images."0.26.0" = overridableMkRustCrate (profileName: rec {
+  "registry+https://github.com/rust-lang/crates.io-index".sentry-debug-images."0.27.0" = overridableMkRustCrate (profileName: rec {
     name = "sentry-debug-images";
-    version = "0.26.0";
+    version = "0.27.0";
     registry = "registry+https://github.com/rust-lang/crates.io-index";
     src = fetchCratesIo {
       inherit name version;
-      sha256 = "b0a28809378552c81392a6f0b80863bdeac137acb45124a44b0dbb2895a7c0d3";
+      sha256 = "06fcbb7efe38d7c213218445952096be246c1f914ef9591dc2cdae9cb4e316d8";
     };
     dependencies = {
       findshlibs = rustPackages."registry+https://github.com/rust-lang/crates.io-index".findshlibs."0.10.2" {inherit profileName;};
-      lazy_static = rustPackages."registry+https://github.com/rust-lang/crates.io-index".lazy_static."1.4.0" {inherit profileName;};
-      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.26.0" {inherit profileName;};
+      once_cell = rustPackages."registry+https://github.com/rust-lang/crates.io-index".once_cell."1.12.0" {inherit profileName;};
+      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.27.0" {inherit profileName;};
     };
   });
 
-  "registry+https://github.com/rust-lang/crates.io-index".sentry-log."0.26.0" = overridableMkRustCrate (profileName: rec {
+  "registry+https://github.com/rust-lang/crates.io-index".sentry-log."0.27.0" = overridableMkRustCrate (profileName: rec {
     name = "sentry-log";
-    version = "0.26.0";
+    version = "0.27.0";
     registry = "registry+https://github.com/rust-lang/crates.io-index";
     src = fetchCratesIo {
       inherit name version;
-      sha256 = "f4e00357035f6af5404870048167affaa551e15e0bee6efa2157e4b9bec6a453";
+      sha256 = "58a76b41861ebde9b0a689fa13080ad5508583e094c48acad461eec5acd7fc5f";
     };
     dependencies = {
       log = rustPackages."registry+https://github.com/rust-lang/crates.io-index".log."0.4.17" {inherit profileName;};
-      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.26.0" {inherit profileName;};
+      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.27.0" {inherit profileName;};
     };
   });
 
-  "registry+https://github.com/rust-lang/crates.io-index".sentry-panic."0.26.0" = overridableMkRustCrate (profileName: rec {
+  "registry+https://github.com/rust-lang/crates.io-index".sentry-panic."0.27.0" = overridableMkRustCrate (profileName: rec {
     name = "sentry-panic";
-    version = "0.26.0";
+    version = "0.27.0";
     registry = "registry+https://github.com/rust-lang/crates.io-index";
     src = fetchCratesIo {
       inherit name version;
-      sha256 = "f8b442769cc34115f64393f7bfe4f863c3c38749e0c0b9613a7ae25b37c7ba53";
+      sha256 = "696c74c5882d5a0d5b4a31d0ff3989b04da49be7983b7f52a52c667da5b480bf";
     };
     dependencies = {
-      sentry_backtrace = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-backtrace."0.26.0" {inherit profileName;};
-      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.26.0" {inherit profileName;};
+      sentry_backtrace = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-backtrace."0.27.0" {inherit profileName;};
+      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.27.0" {inherit profileName;};
     };
   });
 
-  "registry+https://github.com/rust-lang/crates.io-index".sentry-tracing."0.26.0" = overridableMkRustCrate (profileName: rec {
+  "registry+https://github.com/rust-lang/crates.io-index".sentry-tracing."0.27.0" = overridableMkRustCrate (profileName: rec {
     name = "sentry-tracing";
-    version = "0.26.0";
+    version = "0.27.0";
     registry = "registry+https://github.com/rust-lang/crates.io-index";
     src = fetchCratesIo {
       inherit name version;
-      sha256 = "d4e2796e40502893ed0d04646e507f91e74f1cbf09e370d42bb1cdbcaeeca9bb";
+      sha256 = "ea50bcf843510179a7ba41c9fe4d83a8958e9f8adf707ec731ff999297536344";
     };
     dependencies = {
-      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.26.0" {inherit profileName;};
+      sentry_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".sentry-core."0.27.0" {inherit profileName;};
       tracing_core = rustPackages."registry+https://github.com/rust-lang/crates.io-index".tracing-core."0.1.27" {inherit profileName;};
       tracing_subscriber = rustPackages."registry+https://github.com/rust-lang/crates.io-index".tracing-subscriber."0.3.11" {inherit profileName;};
     };
   });
 
-  "registry+https://github.com/rust-lang/crates.io-index".sentry-types."0.26.0" = overridableMkRustCrate (profileName: rec {
+  "registry+https://github.com/rust-lang/crates.io-index".sentry-types."0.27.0" = overridableMkRustCrate (profileName: rec {
     name = "sentry-types";
-    version = "0.26.0";
+    version = "0.27.0";
     registry = "registry+https://github.com/rust-lang/crates.io-index";
     src = fetchCratesIo {
       inherit name version;
-      sha256 = "254b600e93e9ef00a48382c9f1e86d27884bd9a5489efa4eb9210c20c72e88a6";
+      sha256 = "823923ae5f54a729159d720aa12181673044ee5c79cbda3be09e56f885e5468f";
     };
     features = builtins.concatLists [
       ["default"]
