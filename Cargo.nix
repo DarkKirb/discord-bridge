@@ -739,13 +739,13 @@ in {
     };
   });
 
-  "registry+https://github.com/rust-lang/crates.io-index".clap."3.2.5" = overridableMkRustCrate (profileName: rec {
+  "registry+https://github.com/rust-lang/crates.io-index".clap."3.2.6" = overridableMkRustCrate (profileName: rec {
     name = "clap";
-    version = "3.2.5";
+    version = "3.2.6";
     registry = "registry+https://github.com/rust-lang/crates.io-index";
     src = fetchCratesIo {
       inherit name version;
-      sha256 = "d53da17d37dba964b9b3ecb5c5a1f193a2762c700e6829201e645b9381c99dc7";
+      sha256 = "9f1fe12880bae935d142c8702d500c63a4e8634b6c3c57ad72bf978fc7b6249a";
     };
     features = builtins.concatLists [
       ["atty"]
@@ -762,7 +762,7 @@ in {
     dependencies = {
       atty = rustPackages."registry+https://github.com/rust-lang/crates.io-index".atty."0.2.14" {inherit profileName;};
       bitflags = rustPackages."registry+https://github.com/rust-lang/crates.io-index".bitflags."1.3.2" {inherit profileName;};
-      clap_derive = buildRustPackages."registry+https://github.com/rust-lang/crates.io-index".clap_derive."3.2.5" {profileName = "__noProfile";};
+      clap_derive = buildRustPackages."registry+https://github.com/rust-lang/crates.io-index".clap_derive."3.2.6" {profileName = "__noProfile";};
       clap_lex = rustPackages."registry+https://github.com/rust-lang/crates.io-index".clap_lex."0.2.2" {inherit profileName;};
       indexmap = rustPackages."registry+https://github.com/rust-lang/crates.io-index".indexmap."1.9.0" {inherit profileName;};
       once_cell = rustPackages."registry+https://github.com/rust-lang/crates.io-index".once_cell."1.12.0" {inherit profileName;};
@@ -772,13 +772,13 @@ in {
     };
   });
 
-  "registry+https://github.com/rust-lang/crates.io-index".clap_derive."3.2.5" = overridableMkRustCrate (profileName: rec {
+  "registry+https://github.com/rust-lang/crates.io-index".clap_derive."3.2.6" = overridableMkRustCrate (profileName: rec {
     name = "clap_derive";
-    version = "3.2.5";
+    version = "3.2.6";
     registry = "registry+https://github.com/rust-lang/crates.io-index";
     src = fetchCratesIo {
       inherit name version;
-      sha256 = "c11d40217d16aee8508cc8e5fde8b4ff24639758608e5374e731b53f85749fb9";
+      sha256 = "ed6db9e867166a43a53f7199b5e4d1f522a1e5bd626654be263c999ce59df39a";
     };
     features = builtins.concatLists [
       ["default"]
@@ -1233,7 +1233,7 @@ in {
     src = fetchCrateLocal workspaceSrc;
     dependencies = {
       anyhow = rustPackages."registry+https://github.com/rust-lang/crates.io-index".anyhow."1.0.58" {inherit profileName;};
-      clap = rustPackages."registry+https://github.com/rust-lang/crates.io-index".clap."3.2.5" {inherit profileName;};
+      clap = rustPackages."registry+https://github.com/rust-lang/crates.io-index".clap."3.2.6" {inherit profileName;};
       dashmap = rustPackages."registry+https://github.com/rust-lang/crates.io-index".dashmap."5.3.4" {inherit profileName;};
       dotenv = rustPackages."registry+https://github.com/rust-lang/crates.io-index".dotenv."0.15.0" {inherit profileName;};
       educe = buildRustPackages."registry+https://github.com/rust-lang/crates.io-index".educe."0.4.19" {profileName = "__noProfile";};
