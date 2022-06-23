@@ -2625,7 +2625,7 @@ in {
       url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk";
       version = "0.5.0";
-      rev = "2c1f5fed8dbf1a61e0adca345e28882584626b85";
+      rev = "091fab8a2a7c402169c9e0a774d56ecc58a7cff3";
     };
     features = builtins.concatLists [
       ["appservice"]
@@ -2697,7 +2697,7 @@ in {
       url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-appservice";
       version = "0.1.0";
-      rev = "2c1f5fed8dbf1a61e0adca345e28882584626b85";
+      rev = "091fab8a2a7c402169c9e0a774d56ecc58a7cff3";
     };
     features = builtins.concatLists [
       ["e2e-encryption"]
@@ -2731,7 +2731,7 @@ in {
       url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-base";
       version = "0.5.1";
-      rev = "2c1f5fed8dbf1a61e0adca345e28882584626b85";
+      rev = "091fab8a2a7c402169c9e0a774d56ecc58a7cff3";
     };
     features = builtins.concatLists [
       ["default"]
@@ -2771,7 +2771,7 @@ in {
       url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-common";
       version = "0.5.0";
-      rev = "2c1f5fed8dbf1a61e0adca345e28882584626b85";
+      rev = "091fab8a2a7c402169c9e0a774d56ecc58a7cff3";
     };
     dependencies = {
       ${
@@ -2817,7 +2817,7 @@ in {
       url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-crypto";
       version = "0.5.0";
-      rev = "2c1f5fed8dbf1a61e0adca345e28882584626b85";
+      rev = "091fab8a2a7c402169c9e0a774d56ecc58a7cff3";
     };
     features = builtins.concatLists [
       ["default"]
@@ -2871,7 +2871,7 @@ in {
       url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-indexeddb";
       version = "0.1.0";
-      rev = "2c1f5fed8dbf1a61e0adca345e28882584626b85";
+      rev = "091fab8a2a7c402169c9e0a774d56ecc58a7cff3";
     };
     features = builtins.concatLists [
       ["e2e-encryption"]
@@ -2911,7 +2911,7 @@ in {
       url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-sled";
       version = "0.1.0";
-      rev = "2c1f5fed8dbf1a61e0adca345e28882584626b85";
+      rev = "091fab8a2a7c402169c9e0a774d56ecc58a7cff3";
     };
     features = builtins.concatLists [
       ["crypto-store"]
@@ -2989,7 +2989,7 @@ in {
       url = "https://github.com/matrix-org/matrix-rust-sdk";
       name = "matrix-sdk-store-encryption";
       version = "0.1.0";
-      rev = "2c1f5fed8dbf1a61e0adca345e28882584626b85";
+      rev = "091fab8a2a7c402169c9e0a774d56ecc58a7cff3";
     };
     dependencies = {
       blake3 = rustPackages."registry+https://github.com/rust-lang/crates.io-index".blake3."1.3.1" {inherit profileName;};
