@@ -1492,7 +1492,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-crypto"
 version = "0.5.0"
-source = "git+https://github.com/matrix-org/matrix-rust-sdk#091fab8a2a7c402169c9e0a774d56ecc58a7cff3"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#a8601e186a06e4a6607757515333bb4f1f367c31"
 dependencies = [
  "aes",
  "async-trait",
@@ -1568,7 +1568,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-sql"
 version = "0.1.0-beta.2"
-source = "git+https://github.com/DarkKirb/matrix-sdk-statestore-sql#c4a42cb3f03625ef85982801fc998537d9f86b6b"
+source = "git+https://github.com/DarkKirb/matrix-sdk-statestore-sql#91b4d2e5629ec8fc680f3c7843208a3f100039dc"
 dependencies = [
  "async-trait",
  "bincode",
@@ -1590,7 +1590,7 @@ dependencies = [
 [[package]]
 name = "matrix-sdk-store-encryption"
 version = "0.1.0"
-source = "git+https://github.com/matrix-org/matrix-rust-sdk#091fab8a2a7c402169c9e0a774d56ecc58a7cff3"
+source = "git+https://github.com/matrix-org/matrix-rust-sdk#a8601e186a06e4a6607757515333bb4f1f367c31"
 dependencies = [
  "blake3",
  "chacha20poly1305",
