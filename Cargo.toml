@@ -39,7 +39,7 @@ sqlx = { version = "0.6.0", features = [
 ] }
 tokio = { version = "1.19.2", features = ["full"] }
 tracing = "0.1.35"
-tracing-subscriber = { version = "0.3.11", features = ["env-filter"] }
+tracing-subscriber = { version = "0.3.12", features = ["env-filter"] }
 twilight-model = { git = "https://github.com/terminal-discord/twilight" }
 url = { version = "2.2.2", features = ["serde"] }
 
