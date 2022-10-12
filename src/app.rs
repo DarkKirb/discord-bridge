@@ -256,7 +256,7 @@ impl App {
                     Err(e) => e.into(),
                 };
                 sentry::integrations::anyhow::capture_anyhow(&err);
-                eprintln!("{:?}", err);
+                eprintln!("{err:?}");
             }
             info!("Shutting down queue runner");
         });
