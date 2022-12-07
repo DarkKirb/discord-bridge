@@ -102,7 +102,7 @@ mod tests {
                 listen_address: vec![IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0))],
                 port: 58913,
                 bridge_url: Url::from_str("http://localhost:58913/").expect("valid URL"),
-                prefix: "".to_owned(),
+                prefix: String::new(),
                 db: DBOptions::default(),
                 admin: user_id!("@lotte:chir.rs").to_owned(),
             },

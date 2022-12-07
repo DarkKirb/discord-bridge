@@ -246,7 +246,7 @@ impl App {
         tokio::spawn(async move {
             while let Some(event) = receiver.recv().await {
                 let arc = Arc::clone(&arc2);
-                if let QueueEvent::Close = event {
+                if matches!(event, QueueEvent::Close) {
                     debug!("Closing queue");
                     receiver.close();
                 }
@@ -256,7 +256,7 @@ impl App {
                     Err(e) => e.into(),
                 };
                 sentry::integrations::anyhow::capture_anyhow(&err);
-                eprintln!("{:?}", err);
+                eprintln!("{err:?}");
             }
             info!("Shutting down queue runner");
         });

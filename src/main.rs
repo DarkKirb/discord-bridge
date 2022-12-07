@@ -91,7 +91,7 @@ async fn main() -> Result<()> {
 
     if let Err(e) = main().await {
         sentry::integrations::anyhow::capture_anyhow(&e);
-        eprintln!("{:?}", e);
+        eprintln!("{e:?}");
     }
     Ok(())
 }
