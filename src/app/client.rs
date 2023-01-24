@@ -110,7 +110,7 @@ impl App {
                 if let Some(client) = self.discord_clients.get(&user_id) {
                     Ok(Arc::clone(&*client))
                 } else {
-                    let username = format!("{}_discord_{}", self.config.bridge.prefix, user_id);
+                    let username = format!("{}_discord_{user_id}", self.config.bridge.prefix);
                     self.try_register_user(&username).await?;
                     let user = Arc::new(VirtualClient::new(
                         self.appservice.virtual_user_client(&username).await?,
